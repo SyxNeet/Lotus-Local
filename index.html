@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Step Tour Booking Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Flatpickr CSS for calendar -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+
+<body>
+    <div class="tutorial__customize">
+        <p class="tutorial__title">Tutorial customize Lotus Charm Travel</p>
+        <svg class="close__tutorial" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+            fill="none">
+            <g opacity="0.7">
+                <path d="M18 18L12 12M12 12L6 6M12 12L18 6M12 12L6 18" stroke="white" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+        </svg>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/HFa78cdFHao?si=KXfkJjSExrOpDe5q"
+            title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+    <div id="container__customize">
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="steps-container">
+                <div class="steps-left">
+                    <div class="step active" data-step="1">
+                        <div class="step-number"></div>
+                        <span class="step-label">Tour Information</span>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="57" height="12" viewBox="0 0 57 12" fill="none">
+                        <path
+                            d="M56.495 6.49497C56.7683 6.22161 56.7683 5.77839 56.495 5.50503L52.0402 1.05025C51.7668 0.776886 51.3236 0.776886 51.0503 1.05025C50.7769 1.32362 50.7769 1.76684 51.0503 2.0402L55.0101 6L51.0503 9.9598C50.7769 10.2332 50.7769 10.6764 51.0503 10.9497C51.3236 11.2231 51.7668 11.2231 52.0402 10.9497L56.495 6.49497ZM0 6V6.7H1.4V6V5.3H0V6ZM4.2 6V6.7H7V6V5.3H4.2V6ZM9.8 6V6.7H12.6V6V5.3H9.8V6ZM15.4 6V6.7H18.2V6V5.3H15.4V6ZM21 6V6.7H23.8V6V5.3H21V6ZM26.6 6V6.7H29.4V6V5.3H26.6V6ZM32.2 6V6.7H35V6V5.3H32.2V6ZM37.8 6V6.7H40.6V6V5.3H37.8V6ZM43.4 6V6.7H46.2V6V5.3H43.4V6ZM49 6V6.7H51.8V6V5.3H49V6ZM54.6 6V6.7H56V6V5.3H54.6V6Z"
+                            fill="#1A1A1A" fill-opacity="0.6" />
+                    </svg>
+                    <div class="step" data-step="2">
+                        <div class="step-number"></div>
+                        <span class="step-label">Daily Plan</span>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="57" height="12" viewBox="0 0 57 12" fill="none">
+                        <path
+                            d="M56.495 6.49497C56.7683 6.22161 56.7683 5.77839 56.495 5.50503L52.0402 1.05025C51.7668 0.776886 51.3236 0.776886 51.0503 1.05025C50.7769 1.32362 50.7769 1.76684 51.0503 2.0402L55.0101 6L51.0503 9.9598C50.7769 10.2332 50.7769 10.6764 51.0503 10.9497C51.3236 11.2231 51.7668 11.2231 52.0402 10.9497L56.495 6.49497ZM0 6V6.7H1.4V6V5.3H0V6ZM4.2 6V6.7H7V6V5.3H4.2V6ZM9.8 6V6.7H12.6V6V5.3H9.8V6ZM15.4 6V6.7H18.2V6V5.3H15.4V6ZM21 6V6.7H23.8V6V5.3H21V6ZM26.6 6V6.7H29.4V6V5.3H26.6V6ZM32.2 6V6.7H35V6V5.3H32.2V6ZM37.8 6V6.7H40.6V6V5.3H37.8V6ZM43.4 6V6.7H46.2V6V5.3H43.4V6ZM49 6V6.7H51.8V6V5.3H49V6ZM54.6 6V6.7H56V6V5.3H54.6V6Z"
+                            fill="#1A1A1A" fill-opacity="0.6" />
+                    </svg>
+                    <div class="step" data-step="3">
+                        <div class="step-number"></div>
+                        <span class="step-label">Contact Info</span>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="57" height="12" viewBox="0 0 57 12" fill="none">
+                        <path
+                            d="M56.495 6.49497C56.7683 6.22161 56.7683 5.77839 56.495 5.50503L52.0402 1.05025C51.7668 0.776886 51.3236 0.776886 51.0503 1.05025C50.7769 1.32362 50.7769 1.76684 51.0503 2.0402L55.0101 6L51.0503 9.9598C50.7769 10.2332 50.7769 10.6764 51.0503 10.9497C51.3236 11.2231 51.7668 11.2231 52.0402 10.9497L56.495 6.49497ZM0 6V6.7H1.4V6V5.3H0V6ZM4.2 6V6.7H7V6V5.3H4.2V6ZM9.8 6V6.7H12.6V6V5.3H9.8V6ZM15.4 6V6.7H18.2V6V5.3H15.4V6ZM21 6V6.7H23.8V6V5.3H21V6ZM26.6 6V6.7H29.4V6V5.3H26.6V6ZM32.2 6V6.7H35V6V5.3H32.2V6ZM37.8 6V6.7H40.6V6V5.3H37.8V6ZM43.4 6V6.7H46.2V6V5.3H43.4V6ZM49 6V6.7H51.8V6V5.3H49V6ZM54.6 6V6.7H56V6V5.3H54.6V6Z"
+                            fill="#1A1A1A" fill-opacity="0.6" />
+                    </svg>
+                    <div class="step" data-step="4">
+                        <div class="step-number"></div>
+                        <span class="step-label">Payment ( With OnePay )</span>
+                    </div>
+                </div>
+                <div class="step-navigation">
+                    <button class="nav-btn prev-btn" id="prevBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M7.9763 4.94165L2.91797 9.99998L7.9763 15.0583" stroke="#1A1A1A"
+                                stroke-opacity="0.4" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <path d="M17.0836 10H3.05859" stroke="#1A1A1A" stroke-opacity="0.4" stroke-width="1.5"
+                                stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        Previous Step
+                    </button>
+                    <div class="dot"></div>
+                    <button class="nav-btn next-btn" id="nextBtn">
+                        Next Step
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M12.0234 4.94141L17.0818 9.99974L12.0234 15.0581" stroke="#2E7658"
+                                stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <path d="M2.91797 10H16.943" stroke="#2E7658" stroke-width="1.25" stroke-miterlimit="10"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="container__customize">
+            <div class="form-container">
+                <!-- Main Form Container -->
+                <div class="form-content">
+                    <form id="tourForm" class="tour-form" novalidate>
+                        <!-- Step 1: Tour Information -->
+                        <div class="step-content active" id="step1">
+
+                            <div class="form-header">
+                                <p class="form-title">Tour Information</p>
+                                <button class="tutorial-btn">
+                                    Tutorial customize <svg xmlns="http://www.w3.org/2000/svg" width="22" height="16"
+                                        viewBox="0 0 22 16" fill="none">
+                                        <path
+                                            d="M21.54 2.42C21.4156 1.95196 21.1705 1.5248 20.8292 1.18127C20.4878 0.837733 20.0622 0.589876 19.595 0.4625C17.875 5.46376e-08 11 0 11 0C11 0 4.125 5.46376e-08 2.405 0.4625C1.93777 0.589876 1.51219 0.837733 1.17085 1.18127C0.829506 1.5248 0.58438 1.95196 0.46 2.42C5.46376e-08 4.1475 0 7.75 0 7.75C0 7.75 5.46376e-08 11.3525 0.46 13.08C0.58438 13.548 0.829506 13.9752 1.17085 14.3187C1.51219 14.6623 1.93777 14.9101 2.405 15.0375C4.125 15.5 11 15.5 11 15.5C11 15.5 17.875 15.5 19.595 15.0375C20.0622 14.9101 20.4878 14.6623 20.8292 14.3187C21.1705 13.9752 21.4156 13.548 21.54 13.08C22 11.3525 22 7.75 22 7.75C22 7.75 22 4.1475 21.54 2.42Z"
+                                            fill="#FF0302" />
+                                        <path d="M8.75002 11.0213V4.47878L14.5 7.75003L8.75002 11.0213Z"
+                                            fill="#FEFEFE" />
+                                    </svg>
+                                </button>
+                            </div>
+
+
+                            <!-- Date Selection -->
+                            <div class="date-section">
+                                <div class="form-group">
+                                    <label for="startDate" class="required">Start date</label>
+                                    <div class="form-input">
+                                        <input type="text" id="startDate" name="startDate"
+                                            placeholder="Select start day" readonly>
+                                        <img src="https://lotus.okhub-tech.com/wp-content/uploads/2025/06/calendar-1.svg"
+                                            alt="calendar icon" class="calendar-icon">
+                                    </div>
+                                    <span class="error-message" data-field="startDate"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="endDate" class="required">End date</label>
+                                    <div class="form-input">
+                                        <input type="text" id="endDate" name="endDate" placeholder="Select end day"
+                                            readonly>
+                                        <img src="https://lotus.okhub-tech.com/wp-content/uploads/2025/06/calendar-1.svg"
+                                            alt="calendar icon" class="calendar-icon">
+                                    </div>
+                                    <span class="error-message" data-field="endDate"></span>
+                                </div>
+                            </div>
+
+                            <!-- Days Info -->
+                            <div class="days-info">
+                                <span>Number of days of tour: <strong id="tourDays">0 days</strong></span>
+                            </div>
+
+                            <!-- Pax Quantity -->
+                            <div class="pax-section">
+                                <div class="pax-header">
+                                    <div class="pax-container__left">
+                                        <p class="pax-title">Pax quantity <span>*</span></p>
+                                        <div class="pax-options">
+                                            <label class="radio-option">
+                                                <input type="radio" name="paxType" value="default" checked>
+                                                <!-- <span class="radio-custom"></span> -->
+                                                Default all days
+                                            </label>
+                                            <label class="radio-option">
+                                                <input type="radio" name="paxType" value="customize">
+                                                <!-- <span class="radio-custom"></span> -->
+                                                Customize by date
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="pax-note">
+                                        <p class="pax-title">Pax quantity <span>*</span></p>
+                                        <span>Number of pax on tour: <strong id="totalPax">0 pax</strong></span>
+                                    </div>
+                                </div>
+
+                                <!-- Age Groups -->
+                                <div class="age-groups">
+                                    <div class="age-group">
+                                        <div class="age-label">
+                                            <!-- <span class="age-icon">👤</span> -->
+                                            <span>Adults (18+ Age)</span>
+                                        </div>
+                                        <div class="quantity-controls">
+                                            <button type="button" class="qty-btn minus" data-target="adults">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                                    viewBox="0 0 18 18" fill="none">
+                                                    <path
+                                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                                        fill="white" />
+                                                </svg>
+                                            </button>
+                                            <input type="number" id="adults" name="adults" value="0" min="0" readonly>
+                                            <p class="quantity-number" data-target="adults">0</p>
+                                            <button type="button" class="qty-btn plus" data-target="adults"><svg
+                                                    xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                                    viewBox="0 0 18 18" fill="none">
+                                                    <path
+                                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                                        fill="white" />
+                                                    <path
+                                                        d="M9.00249 13.909C8.7043 13.909 8.45703 13.6617 8.45703 13.3635V4.63627C8.45703 4.33809 8.7043 4.09082 9.00249 4.09082C9.30067 4.09082 9.54794 4.33809 9.54794 4.63627V13.3635C9.54794 13.6617 9.30067 13.909 9.00249 13.909Z"
+                                                        fill="white" />
+                                                </svg></button>
+                                        </div>
+                                    </div>
+
+                                    <div class="age-group">
+                                        <div class="age-label">
+                                            <!-- <span class="age-icon">👶</span> -->
+                                            <span>Children (1-5 Age)</span>
+                                        </div>
+                                        <div class="quantity-controls">
+                                            <button type="button" class="qty-btn minus" data-target="children1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                                    viewBox="0 0 18 18" fill="none">
+                                                    <path
+                                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                                        fill="white" />
+                                                </svg></button>
+                                            <input type="number" id="children1" name="children1" value="0" min="0"
+                                                readonly>
+                                            <p class="quantity-number" data-target="children1">0</p>
+                                            <button type="button" class="qty-btn plus" data-target="children1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                                    viewBox="0 0 18 18" fill="none">
+                                                    <path
+                                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                                        fill="white" />
+                                                    <path
+                                                        d="M9.00249 13.909C8.7043 13.909 8.45703 13.6617 8.45703 13.3635V4.63627C8.45703 4.33809 8.7043 4.09082 9.00249 4.09082C9.30067 4.09082 9.54794 4.33809 9.54794 4.63627V13.3635C9.54794 13.6617 9.30067 13.909 9.00249 13.909Z"
+                                                        fill="white" />
+                                                </svg></button>
+                                        </div>
+                                    </div>
+
+                                    <div class="age-group">
+                                        <div class="age-label">
+                                            <!-- <span class="age-icon">👶</span> -->
+                                            <span>Children (1-5 Age)</span>
+                                        </div>
+                                        <div class="quantity-controls">
+                                            <button type="button" class="qty-btn minus" data-target="children2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                                    viewBox="0 0 18 18" fill="none">
+                                                    <path
+                                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                                        fill="white" />
+                                                </svg></button>
+                                            <input type="number" id="children2" name="children1" value="0" min="0"
+                                                readonly>
+                                            <p class="quantity-number" data-target="children2">0</p>
+                                            <button type="button" class="qty-btn plus" data-target="children2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                                    viewBox="0 0 18 18" fill="none">
+                                                    <path
+                                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                                        fill="white" />
+                                                    <path
+                                                        d="M9.00249 13.909C8.7043 13.909 8.45703 13.6617 8.45703 13.3635V4.63627C8.45703 4.33809 8.7043 4.09082 9.00249 4.09082C9.30067 4.09082 9.54794 4.33809 9.54794 4.63627V13.3635C9.54794 13.6617 9.30067 13.909 9.00249 13.909Z"
+                                                        fill="white" />
+                                                </svg></button>
+                                        </div>
+                                    </div>
+
+                                    <div class="age-group">
+                                        <div class="age-label">
+                                            <!-- <span class="age-icon">👶</span> -->
+                                            <span>Children (1-5 Age)</span>
+                                        </div>
+                                        <div class="quantity-controls">
+                                            <button type="button" class="qty-btn minus" data-target="children3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                                    viewBox="0 0 18 18" fill="none">
+                                                    <path
+                                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                                        fill="white" />
+                                                </svg></button>
+                                            <input type="number" id="children3" name="children1" value="0" min="0"
+                                                readonly>
+                                            <p class="quantity-number" data-target="children3">0</p>
+                                            <button type="button" class="qty-btn plus" data-target="children3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                                    viewBox="0 0 18 18" fill="none">
+                                                    <path
+                                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                                        fill="white" />
+                                                    <path
+                                                        d="M9.00249 13.909C8.7043 13.909 8.45703 13.6617 8.45703 13.3635V4.63627C8.45703 4.33809 8.7043 4.09082 9.00249 4.09082C9.30067 4.09082 9.54794 4.33809 9.54794 4.63627V13.3635C9.54794 13.6617 9.30067 13.909 9.00249 13.909Z"
+                                                        fill="white" />
+                                                </svg></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="error-message" data-field="totalPax"></span>
+                            </div>
+
+                            <!-- Global Error Messages -->
+                            <div class="form-errors" id="formErrors"></div>
+
+                        </div>
+
+                        <!-- Step 2: Daily Plan -->
+                        <div class="step-content" id="step2">
+                            <div id="dailyPlanContainer">
+                                <!-- Day 1 Example -->
+                                <div class="daily-plan-day" id="day-1">
+                                    <div class="day-header">
+                                        <div class="day-title">Day 1: <span class="day-date">2025/05/29</span></div>
+                                        <label class="no-service-option">
+                                            <input type="checkbox" id="noService-1" data-day="1">
+                                            <span class="checkbox-custom"></span>
+                                            No use service for this day
+                                        </label>
+                                    </div>
+
+                                    <div class="day-content" id="dayContent-1">
+                                        <!-- Select Location -->
+                                        <div class="location-section">
+                                            <div class="location-header">
+                                                <h3>Select location</h3>
+                                                <p class="section-date">Day 1: 2025/05/29</p>
+                                            </div>
+
+                                            <div class="location-options">
+                                                <label class="location-option">
+                                                    <input type="radio" name="location-1" value="men-duc" checked>
+                                                    Men Duc
+                                                </label>
+                                                <label class="location-option">
+                                                    <input type="radio" name="location-1" value="men-trung">
+                                                    Men Trung
+                                                </label>
+                                                <label class="location-option">
+                                                    <input type="radio" name="location-1" value="men-nam">
+                                                    Men Nam
+                                                </label>
+                                                <label class="location-option">
+                                                    <input type="radio" name="location-1" value="phu-quoc">
+                                                    Phu Quoc
+                                                </label>
+                                            </div>
+
+                                            <div class="location-details">
+                                                <div class="form-group">
+                                                    <label for="city-1">City *</label>
+                                                    <div class="searchable-select">
+                                                        <input type="text" id="city-1" name="city-1"
+                                                            placeholder="Search city..." class="city-search"
+                                                            value="Ha Noi">
+                                                        <div class="search-dropdown" id="cityDropdown-1"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="tourType-1">Type of tour *</label>
+                                                    <div class="searchable-select">
+                                                        <input type="text" id="tourType-1" name="tourType-1"
+                                                            placeholder="Search tour type..." class="tour-type-search"
+                                                            value="Cultural & Heritage Tour">
+                                                        <div class="search-dropdown" id="tourTypeDropdown-1"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Select Tour -->
+                                        <div class="tour-section">
+                                            <div class="tour-header">
+                                                <h3>Select tour</h3>
+                                                <p class="section-date">Day 1: 2025/05/29</p>
+                                            </div>
+
+                                            <div class="tour-cards" id="tourCards-1">
+                                                <div class="tour-card selected" data-tour-id="1" data-day="1">
+                                                    <div class="tour-image">
+                                                        <img src="/placeholder.svg?height=150&width=200"
+                                                            alt="Ha Noi 1 Day Tour">
+                                                    </div>
+                                                    <div class="tour-info">
+                                                        <h4 class="tour-title">Ha Noi 1 Day Tour</h4>
+                                                        <p>Hoan Kiem Lake - Ngoc Son Temple - Van Mieu Quoc Tu Giam -
+                                                            Lang Bac - Ba Dinh Square</p>
+                                                        <div class="tour-details">
+                                                            <span class="tour-type">Private Tour</span>
+                                                            <div class="tour-services">
+                                                                <span class="service">Tour guide</span>
+                                                                <span class="service">Shuttle</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tour-price">$500</div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="tour-card" data-tour-id="2" data-day="1">
+                                                    <div class="tour-image">
+                                                        <img src="/placeholder.svg?height=150&width=200"
+                                                            alt="Ha Noi Premium Tour">
+                                                    </div>
+                                                    <div class="tour-info">
+                                                        <h4 class="tour-title">Ha Noi Premium Cultural Tour</h4>
+                                                        <p>Premium experience with luxury transport and private guide
+                                                            for cultural sites</p>
+                                                        <div class="tour-details">
+                                                            <span class="tour-type">Premium Tour</span>
+                                                            <div class="tour-services">
+                                                                <span class="service">Private guide</span>
+                                                                <span class="service">Luxury transport</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tour-price">$800</div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="tour-card" data-tour-id="3" data-day="1">
+                                                    <div class="tour-image">
+                                                        <img src="/placeholder.svg?height=150&width=200"
+                                                            alt="Ha Noi Group Tour">
+                                                    </div>
+                                                    <div class="tour-info">
+                                                        <h4 class="tour-title">Ha Noi Group Cultural Tour</h4>
+                                                        <p>Join other travelers for an affordable cultural experience in
+                                                            Hanoi</p>
+                                                        <div class="tour-details">
+                                                            <span class="tour-type">Group Tour</span>
+                                                            <div class="tour-services">
+                                                                <span class="service">Shared guide</span>
+                                                                <span class="service">Group transport</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tour-price">$300</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tour Itinerary -->
+                                        <div class="itinerary-section">
+                                            <div class="itinerary-header">
+                                                <h3>Tour itinerary</h3>
+                                                <p class="section-date">Day 1: 2025/05/29</p>
+                                            </div>
+
+                                            <div class="itinerary-options">
+                                                <label class="itinerary-option selected">
+                                                    <input type="radio" name="itinerary-1" value="standard" checked>
+                                                    <span class="radio-custom"></span>
+                                                    <div class="itinerary-details">
+                                                        <h4>Hanoi classic 1 day tour</h4>
+                                                        <p>Standard car for 4 pax price 500 USD</p>
+                                                        <small>Includes: Ticket + Tour guide</small>
+                                                    </div>
+                                                </label>
+
+                                                <label class="itinerary-option">
+                                                    <input type="radio" name="itinerary-1" value="vip">
+                                                    <span class="radio-custom"></span>
+                                                    <div class="itinerary-details">
+                                                        <h4>Hanoi classic 1 day tour</h4>
+                                                        <p>VIP car for 4 pax price 800 USD</p>
+                                                        <small>Includes: Ticket + Tour guide</small>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Images for Fortune 7 seats -->
+                                        <div class="vehicle-section">
+                                            <h3>Images for Fortune 7 seats</h3>
+                                            <p class="section-subtitle">Suitable for tour from: <strong>2 -
+                                                    4pax</strong></p>
+
+                                            <div class="vehicle-images">
+                                                <img src="/placeholder.svg?height=100&width=150" alt="Vehicle 1">
+                                                <img src="/placeholder.svg?height=100&width=150" alt="Vehicle 2">
+                                                <img src="/placeholder.svg?height=100&width=150" alt="Vehicle 3">
+                                                <img src="/placeholder.svg?height=100&width=150" alt="Vehicle 4">
+                                            </div>
+                                        </div>
+
+                                        <!-- Select Hotel -->
+                                        <div class="hotel-section">
+                                            <div class="hotel-header">
+                                                <h3>Select hotel</h3>
+                                                <p class="section-date">Day 1: 2025/05/29</p>
+                                            </div>
+
+                                            <div class="room-selector">
+                                                <label>Select number of rooms</label>
+                                                <div class="room-controls">
+                                                    <button type="button" class="room-btn minus" data-day="1">-</button>
+                                                    <span class="room-count" id="roomCount-1">02</span>
+                                                    <button type="button" class="room-btn plus" data-day="1">+</button>
+                                                </div>
+                                            </div>
+
+                                            <div class="hotel-options" id="hotelOptions-1">
+                                                <div class="hotel-option selected">
+                                                    <div class="hotel-info">
+                                                        <h4>Lotus Economy Hotel</h4>
+                                                        <p>Standard room with basic amenities</p>
+                                                        <div class="hotel-price">$80/night</div>
+                                                    </div>
+                                                </div>
+                                                <div class="hotel-option">
+                                                    <div class="hotel-info">
+                                                        <h4>Lotus Premium Hotel</h4>
+                                                        <p>Deluxe room with premium amenities</p>
+                                                        <div class="hotel-price">$150/night</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="hotel-images">
+                                                <h4>Images for Lotus Economy</h4>
+                                                <div class="hotel-gallery" id="hotelGallery-1">
+                                                    <img src="/placeholder.svg?height=100&width=150" alt="Hotel Room 1">
+                                                    <img src="/placeholder.svg?height=100&width=150" alt="Hotel Room 2">
+                                                    <img src="/placeholder.svg?height=100&width=150" alt="Hotel Room 3">
+                                                    <img src="/placeholder.svg?height=100&width=150" alt="Hotel Room 4">
+                                                </div>
+
+                                                <div class="extra-bed-options">
+                                                    <label class="checkbox-option">
+                                                        <input type="checkbox" name="extraBed-1" checked>
+                                                        <span class="checkbox-custom"></span>
+                                                        Extra bed (Requested) x4
+                                                    </label>
+                                                    <label class="checkbox-option">
+                                                        <input type="checkbox" name="addBed-1">
+                                                        <span class="checkbox-custom"></span>
+                                                        Add extra bed
+                                                    </label>
+                                                    <label class="checkbox-option">
+                                                        <input type="checkbox" name="noNeed-1">
+                                                        <span class="checkbox-custom"></span>
+                                                        No need
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tour Guide -->
+                                        <div class="guide-section">
+                                            <div class="guide-header">
+                                                <h3>Tour guide</h3>
+                                                <p class="section-date">Day 1: 2025/05/29</p>
+                                            </div>
+                                            <p class="guide-description">Choose a tour guide whose language is
+                                                appropriate for you. It will make your trip more effective.</p>
+
+                                            <div class="form-group">
+                                                <select id="tourGuide-1" name="tourGuide-1">
+                                                    <option value="">Please select the tour guide you want</option>
+                                                    <option value="english" selected>English Speaking Guide</option>
+                                                    <option value="vietnamese">Vietnamese Speaking Guide</option>
+                                                    <option value="chinese">Chinese Speaking Guide</option>
+                                                    <option value="korean">Korean Speaking Guide</option>
+                                                    <option value="japanese">Japanese Speaking Guide</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Other Services -->
+                                        <div class="services-section">
+                                            <div class="services-header">
+                                                <h3>Other service</h3>
+                                                <p class="section-date">Day 1: 2025/05/29</p>
+                                            </div>
+
+                                            <div class="services-grid">
+                                                <label class="service-option">
+                                                    <input type="checkbox" name="visa-1" checked>
+                                                    <span class="checkbox-custom"></span>
+                                                    Visa
+                                                </label>
+                                                <label class="service-option">
+                                                    <input type="checkbox" name="massage-1">
+                                                    <span class="checkbox-custom"></span>
+                                                    Massage
+                                                </label>
+                                                <label class="service-option">
+                                                    <input type="checkbox" name="romantic-1">
+                                                    <span class="checkbox-custom"></span>
+                                                    Romantic dinner
+                                                </label>
+                                                <label class="service-option">
+                                                    <input type="checkbox" name="arrival-1">
+                                                    <span class="checkbox-custom"></span>
+                                                    Arrival fast track
+                                                </label>
+                                                <label class="service-option">
+                                                    <input type="checkbox" name="vietnamese-1">
+                                                    <span class="checkbox-custom"></span>
+                                                    Vietnamese hair wash
+                                                </label>
+                                                <label class="service-option">
+                                                    <input type="checkbox" name="party-1">
+                                                    <span class="checkbox-custom"></span>
+                                                    Party
+                                                </label>
+                                                <label class="service-option">
+                                                    <input type="checkbox" name="departure-1">
+                                                    <span class="checkbox-custom"></span>
+                                                    Departure fast track
+                                                </label>
+                                                <label class="service-option">
+                                                    <input type="checkbox" name="photography-1">
+                                                    <span class="checkbox-custom"></span>
+                                                    Professional photography
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="day-actions">
+                                            <button type="button" class="confirm-day-btn" data-day="1">
+                                                Confirm service for this day →
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="day-collapsed" id="dayCollapsed-1" style="display: none;">
+                                        <div class="collapsed-content">
+                                            <h4>Day 1: 2025/05/29</h4>
+                                            <p class="collapsed-status">Confirmed</p>
+                                            <div class="collapsed-details">
+                                                <p><strong>Location:</strong> <span id="collapsedLocation-1">Men
+                                                        Duc</span></p>
+                                                <p><strong>City:</strong> <span id="collapsedCity-1">Ha Noi</span></p>
+                                                <p><strong>Tour Type:</strong> <span id="collapsedTourType-1">Cultural &
+                                                        Heritage Tour</span></p>
+                                            </div>
+                                            <button type="button" class="see-detail-btn" data-day="1">See Detail
+                                                →</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Contact Info -->
+                        <div class="step-content" id="step3">
+                            <div class="form-header">
+                                <h2>Contact Information</h2>
+                            </div>
+                            <div class="contact-content">
+                                <p>Contact information form will be here...</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Payment -->
+                        <div class="step-content" id="step4">
+                            <div class="form-header">
+                                <h2>Payment (With OnePay)</h2>
+                            </div>
+                            <div class="payment-content">
+                                <p>Payment form will be here...</p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="sidebar active">
+                    <p class="sidebar-header">Subtotal customize tour
+                        <svg class="close-sidebar" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none">
+                            <path d="M5 5L18.9991 18.9991" stroke="#292D32" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <path d="M5.00094 18.9991L19 5" stroke="#292D32" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </p>
+                    <div class="sidebar-content">
+                        <div class="date-summary summary-item">
+                            <div class="summary-row">
+                                <span class="total-day">Number of days:</span>
+                                <span id="sidebarDays">--</span>
+                            </div>
+                            <div class="summary-date">
+                                <div class="summary-row">
+                                    <span class="title-date">Start date:</span>
+                                    <span id="sidebarStartDate">--</span>
+                                </div>
+                                <div class="line"></div>
+                                <div class="summary-row">
+                                    <span class="title-date">End date:</span>
+                                    <span id="sidebarEndDate">--</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tour-summary summary-item">
+                            <div class="tour-item">
+                                <div class="tour-item-title">
+                                    <p class="label">Day 1: Hanoi Classic Tour 1Day - Tour Code LC501
+                                    </p>
+                                    <span class="detail">Detail</span>
+                                </div>
+                                <div class="tour-members-day">
+                                    <p>Adults: <strong>X4</strong></p>
+                                    <p>Children: <strong>X0</strong></p>
+                                </div>
+                            </div>
+                            <div class="tour-item">
+                                <div class="tour-item-title">
+                                    <p class="label">Day 1: Hanoi Classic Tour 1Day - Tour Code LC501
+                                    </p>
+                                    <span class="detail">Detail</span>
+                                </div>
+                                <div class="tour-members-day">
+                                    <p>Adults: <strong>X4</strong></p>
+                                    <p>Children: <strong>X0</strong></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="gift-section summary-item">
+                            <p>Gift for you</p>
+                            <p id="sidebar-gift">Lotus Charm Travel T-Shirt</p>
+                        </div>
+                        <div class="coupon-section summary-item">
+                            <p>Lotus Coupon</p>
+                            <svg class="coupon-btn" xmlns="http://www.w3.org/2000/svg" width="18" height="19"
+                                viewBox="0 0 18 19" fill="none">
+                                <path
+                                    d="M6.68172 16.0022C6.53922 16.0022 6.39672 15.9497 6.28422 15.8372C6.06672 15.6197 6.06672 15.2597 6.28422 15.0422L11.1742 10.1522C11.5342 9.79215 11.5342 9.20715 11.1742 8.84715L6.28422 3.95715C6.06672 3.73965 6.06672 3.37965 6.28422 3.16215C6.50172 2.94465 6.86172 2.94465 7.07922 3.16215L11.9692 8.05215C12.3517 8.43465 12.5692 8.95215 12.5692 9.49965C12.5692 10.0472 12.3592 10.5647 11.9692 10.9472L7.07922 15.8372C6.96672 15.9422 6.82422 16.0022 6.68172 16.0022Z"
+                                    fill="#1A1A1A" />
+                            </svg>
+                        </div>
+
+                        <div class="summary-total">
+                            <div class="total-row">
+                                <span class="total-day">Total for 3 days</span>
+                                <span class="total-price">6,000$</span>
+                            </div>
+                            <div class="payment-methods">
+                                <label class="payment-option">
+                                    <input type="radio" name="paymentMethod" value="payDeposit" checked>
+                                    <p class="pay-deposit">Deposit (20%) </p>
+                                    <p class="pay-note">(<strong>*</strong>Non-refundable in case of cancellation)
+                                    </p>
+                                </label>
+                                <label class="payment-option">
+                                    <input type="radio" name="paymentMethod" value="payFull">
+                                    <p class="pay-full">Pay in full</p>
+                                    <p class="pay-note">(<strong>*</strong>Refundable up to 95% in case of
+                                        cancellation)</p>
+                                </label>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-submit-form" id="submitForm">Submit Tour
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="12" viewBox="0 0 13 12"
+                                fill="none">
+                                <path d="M1.13281 6.0022H11.6828" stroke="white" stroke-width="1.19333"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M7.36719 1.68652L11.6831 6.00237L7.36719 10.3182" stroke="white"
+                                    stroke-width="1.19333" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template id="sidebar__template">
+        <!-- <div class="sidebar active"> -->
+        <p class="sidebar-header">Subtotal customize tour
+            <svg class="close-sidebar" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none">
+                <path d="M5 5L18.9991 18.9991" stroke="#292D32" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                <path d="M5.00094 18.9991L19 5" stroke="#292D32" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </p>
+        <div class="sidebar-content">
+            <div class="date-summary summary-item">
+                <div class="summary-row">
+                    <span class="total-day">Number of days:</span>
+                    <span id="sidebarDays">0 days</span>
+                </div>
+                <div class="summary-date">
+                    <div class="summary-row">
+                        <span class="title-date">Start date:</span>
+                        <span id="sidebarStartDate"></span>
+                    </div>
+                    <div class="line"></div>
+                    <div class="summary-row">
+                        <span class="title-date">End date:</span>
+                        <span id="sidebarEndDate"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tour-summary summary-item">
+                <div class="tour-item">
+                    <div class="tour-item-title">
+                        <p class="label">
+                        </p>
+                        <span class="detail">Detail</span>
+                    </div>
+                    <div class="tour-members-day">
+                        <p><strong></strong></p>
+                        <p><strong></strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gift-section summary-item">
+                <p>Gift for you</p>
+                <p id="sidebar-gift">Default Gift</p>
+            </div>
+            <div class="coupon-section summary-item">
+                <p>Lotus Coupon</p>
+                <svg class="coupon-btn" xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19"
+                    fill="none">
+                    <path
+                        d="M6.68172 16.0022C6.53922 16.0022 6.39672 15.9497 6.28422 15.8372C6.06672 15.6197 6.06672 15.2597 6.28422 15.0422L11.1742 10.1522C11.5342 9.79215 11.5342 9.20715 11.1742 8.84715L6.28422 3.95715C6.06672 3.73965 6.06672 3.37965 6.28422 3.16215C6.50172 2.94465 6.86172 2.94465 7.07922 3.16215L11.9692 8.05215C12.3517 8.43465 12.5692 8.95215 12.5692 9.49965C12.5692 10.0472 12.3592 10.5647 11.9692 10.9472L7.07922 15.8372C6.96672 15.9422 6.82422 16.0022 6.68172 16.0022Z"
+                        fill="#1A1A1A" />
+                </svg>
+            </div>
+
+            <div class="summary-total">
+                <div class="total-row">
+                    <span class="total-day"></span>
+                    <span class="total-price"></span>
+                </div>
+                <div class="payment-methods">
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="payDeposit" checked>
+                        <p class="pay-deposit">Deposit (20%) </p>
+                        <p class="pay-note">(<strong>*</strong>Non-refundable in case of cancellation)
+                        </p>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="payFull">
+                        <p class="pay-full">Pay in full</p>
+                        <p class="pay-note">(<strong>*</strong>Refundable up to 95% in case of
+                            cancellation)</p>
+                    </label>
+                </div>
+            </div>
+            <button type="button" class="btn-submit-form" id="submitForm">Submit Tour
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="12" viewBox="0 0 13 12" fill="none">
+                    <path d="M1.13281 6.0022H11.6828" stroke="white" stroke-width="1.19333" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M7.36719 1.68652L11.6831 6.00237L7.36719 10.3182" stroke="white" stroke-width="1.19333"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+        <!-- </div> -->
+    </template>
+    <!-- Daily Plan Template -->
+    <template id="daily-plan-template">
+        <div class="daily-plan-day">
+            <div class="day-header">
+                <div class="day-title">Day <span class="day-number"></span>: <span class="day-date"></span></div>
+                <label class="no-service-option">
+                    <input type="checkbox" class="no-service-checkbox">
+                    <span class="checkbox-custom"></span>
+                    No use service for this day
+                </label>
+            </div>
+
+            <div class="day-content">
+                <!-- Select Location -->
+                <div class="location-section">
+                    <div class="location-header">
+                        <p class="section-title">Select location</p>
+                        <p class="section-date">Day <span class="day-number-text"></span>: <span
+                                class="section-date-text"></span></p>
+                    </div>
+
+                    <div class="location-options">
+                        <label class="location-option">
+                            <input type="radio" class="location-radio" value="north" checked>
+                            Miền Bắc
+                        </label>
+                        <label class="location-option">
+                            <input type="radio" class="location-radio" value="central-vietnam">
+                            Miền Trung
+                        </label>
+                        <label class="location-option">
+                            <input type="radio" class="location-radio" value="south">
+                            Miền Nam
+                        </label>
+                        <label class="location-option">
+                            <input type="radio" class="location-radio" value="phu-quoc-island">
+                            Phú Quốc
+                        </label>
+                    </div>
+
+                    <div class="location-details">
+                        <div class="form-group city-section">
+                            <label class="city-label required">City</label>
+                            <div class="searchable-select">
+                                <input type="text" class="city-search" placeholder="Search city...">
+                                <div class="search-dropdown city-dropdown"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="tour-type-label required">Type of tour</label>
+                            <div class="searchable-select">
+                                <input type="text" class="tour-type-search" placeholder="Search tour type...">
+                                <div class="search-dropdown tour-type-dropdown"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Select Tour -->
+                <div class="tour-section">
+                    <div class="tour-header">
+                        <p class="section-title">Select tour</p>
+                        <p class="section-date">Day <span class="day-number-text"></span>: <span
+                                class="section-date-text"></span></p>
+                    </div>
+
+                    <div class="tour-cards">
+                        <!-- Tours will be loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Select Hotel -->
+                <div class="hotel-section">
+                    <div class="hotel-header">
+                        <p class="section-title">Select hotel</p>
+                        <p class="section-date">Day <span class="day-number-text"></span>: <span
+                                class="section-date-text"></span></p>
+                    </div>
+
+                    <div class="room-selector">
+                        <label>Select number of rooms</label>
+                        <div class="room-controls">
+                            <button type="button" class="room-btn minus">-</button>
+                            <span class="room-count">00</span>
+                            <button type="button" class="room-btn plus">+</button>
+                        </div>
+                    </div>
+
+                    <div class="hotel-options">
+                        <!-- Hotel options will be loaded dynamically -->
+                    </div>
+
+                    <div class="hotel-images">
+                        <h4>Images for Lotus Economy</h4>
+                        <div class="hotel-gallery">
+                            <img src="/placeholder.svg?height=100&width=150" alt="Hotel Room 1">
+                            <img src="/placeholder.svg?height=100&width=150" alt="Hotel Room 2">
+                            <img src="/placeholder.svg?height=100&width=150" alt="Hotel Room 3">
+                            <img src="/placeholder.svg?height=100&width=150" alt="Hotel Room 4">
+                        </div>
+
+                        <div class="extra-bed-options">
+                            <label class="checkbox-option">
+                                <input type="checkbox" class="extra-bed-checkbox">
+                                <span class="checkbox-custom"></span>
+                                Extra bed (Requested) x4
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" class="add-bed-checkbox">
+                                <span class="checkbox-custom"></span>
+                                Add extra bed
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" class="no-need-checkbox">
+                                <span class="checkbox-custom"></span>
+                                No need
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Services -->
+                <div class="services-section">
+                    <div class="services-header">
+                        <p class="section-title">Other service</p>
+                        <p class="section-date">Day <span class="day-number-text"></span>: <span
+                                class="section-date-text"></span></p>
+                    </div>
+
+                    <div class="services-grid">
+                        <label class="service-option">
+                            <input type="checkbox" class="visa-checkbox" checked>
+                            <span class="checkbox-custom"></span>
+                            Visa
+                        </label>
+                        <label class="service-option">
+                            <input type="checkbox" class="massage-checkbox">
+                            <span class="checkbox-custom"></span>
+                            Massage
+                        </label>
+                        <label class="service-option">
+                            <input type="checkbox" class="romantic-checkbox">
+                            <span class="checkbox-custom"></span>
+                            Romantic dinner
+                        </label>
+                        <label class="service-option">
+                            <input type="checkbox" class="arrival-checkbox">
+                            <span class="checkbox-custom"></span>
+                            Arrival fast track
+                        </label>
+                        <label class="service-option">
+                            <input type="checkbox" class="vietnamese-checkbox">
+                            <span class="checkbox-custom"></span>
+                            Vietnamese hair wash
+                        </label>
+                        <label class="service-option">
+                            <input type="checkbox" class="party-checkbox">
+                            <span class="checkbox-custom"></span>
+                            Party
+                        </label>
+                        <label class="service-option">
+                            <input type="checkbox" class="departure-checkbox">
+                            <span class="checkbox-custom"></span>
+                            Departure fast track
+                        </label>
+                        <label class="service-option">
+                            <input type="checkbox" class="photography-checkbox">
+                            <span class="checkbox-custom"></span>
+                            Professional photography
+                        </label>
+                    </div>
+                </div>
+
+                <div class="day-actions">
+                    <button type="button" class="confirm-day-btn">
+                        Confirm service for this day →
+                    </button>
+                </div>
+            </div>
+
+            <div class="day-collapsed" style="display: none;">
+                <div class="collapsed-content">
+                    <h4>Day <span class="collapsed-day-number"></span>: <span class="collapsed-date"></span></h4>
+                    <p class="collapsed-status">Confirmed</p>
+                    <div class="collapsed-details">
+                        <p><strong>Location:</strong> <span class="collapsed-location">--</span></p>
+                        <p><strong>City:</strong> <span class="collapsed-city">--</span></p>
+                        <p><strong>Tour Type:</strong> <span class="collapsed-tour-type">--</span></p>
+                    </div>
+                    <button type="button" class="see-detail-btn">See Detail →</button>
+                </div>
+            </div>
+        </div>
+    </template>
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/validate.js@0.13.1/validate.min.js"></script> -->
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script> -->
+    <script src="scripts.js"></script>
+</body>
+
+</html>
