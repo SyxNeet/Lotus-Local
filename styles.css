@@ -1380,6 +1380,8 @@ body {
     height: fit-content;
     padding: 1.25rem;
     width: 31.25rem;
+    position: sticky;
+    top: 7.5rem;
 }
 
 #container__customize .sidebar-header {

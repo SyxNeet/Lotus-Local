@@ -746,16 +746,16 @@ class DailyPlanForm {
 
         if (isNoService) {
             dayContent.style.display = "none"
-            // dayCollapsed.style.display = "block"
+            dayCollapsed.style.display = "block"
 
             // Update collapsed content for no service
-            // const collapsedContent = dayCollapsed.querySelector(".collapsed-content")
-            // collapsedContent.innerHTML = `
-            //     <h4>Day ${dayNumber}: No use service for this day</h4>
-            //     <div class="no-service-indicator">
-            //         <span class="free-day-badge">Free Day</span>
-            //     </div>
-            // `
+            const collapsedContent = dayCollapsed.querySelector(".collapsed-content")
+            collapsedContent.innerHTML = `
+                <h4>Day ${dayNumber}: No use service for this day</h4>
+                <div class="no-service-indicator">
+                    <span class="free-day-badge">Free Day</span>
+                </div>
+            `
 
             // Store no service data
             this.dailyPlans[dayNumber] = {
@@ -767,7 +767,7 @@ class DailyPlanForm {
             this.updateSidebarForFreeDay(dayNumber)
         } else {
             dayContent.style.display = "block"
-            // dayCollapsed.style.display = "none"
+            dayCollapsed.style.display = "none"
 
             // Clear no service data
             if (this.dailyPlans[dayNumber]) {
