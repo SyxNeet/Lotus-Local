@@ -451,20 +451,18 @@ class DailyPlanForm {
         this.cities = [] // Will be loaded from API
         this.currentCities = {} // Cache cities by region
 
-        this.tourTypes = [
-            { value: "adventure-tour", label: "Adventure Tour" },
-            { value: "mini-tour", label: "Mini Tour" },
-            { value: "cultural-tour", label: "Cultural Tour" },
-            { value: "beach-tour", label: "Beach Tour" },
-            { value: "food-tour", label: "Food Tour" },
-            { value: "nature-tour", label: "Nature Tour" },
-            { value: "city-tour", label: "City Tour" },
-            { value: "motorcycle-tour", label: "Motorcycle Tour" },
-            { value: "cruise-tour", label: "Cruise Tour" },
-            { value: "photography-tour", label: "Photography Tour" },
-            { value: "wellness-tour", label: "Wellness Tour" },
-            { value: "eco-tour", label: "Eco Tour" },
-            { value: "luxury-tour", label: "Luxury Tour" }
+        this.tourTypes = [] // Will be loaded from HTML template
+
+        this.guideOptions = [
+            { value: "english", label: "English", flag: "🇬🇧" },
+            { value: "chinese", label: "Chinese", flag: "🇨🇳" },
+            { value: "korean", label: "Korean", flag: "🇰🇷" },
+            { value: "spanish", label: "Spanish", flag: "🇪🇸" },
+            { value: "japanese", label: "Japanese", flag: "🇯🇵" },
+            { value: "vietnamese", label: "Vietnamese", flag: "🇻🇳" },
+            { value: "laos", label: "Laos", flag: "🇱🇦" },
+            { value: "cambodian", label: "Cambodian", flag: "🇰🇭" },
+            { value: "thai", label: "Thai", flag: "🇹🇭" }
         ]
 
         this.init()
@@ -472,6 +470,28 @@ class DailyPlanForm {
 
     init() {
         // Initialize will be called when step 2 is activated
+        this.loadTourTypesFromHTML()
+    }
+
+    // Load tour types from HTML template
+    loadTourTypesFromHTML() {
+        const template = document.getElementById("daily-plan-template")
+        if (!template) return
+
+        const tourTypeOptions = template.content.querySelectorAll(".tour-type-dropdown .dropdown-option")
+        this.tourTypes = Array.from(tourTypeOptions).map(option => ({
+            value: option.getAttribute("data-value"),
+            label: option.textContent.trim()
+        }))
+    }
+
+    // Get tour type label from HTML template by value
+    getTourTypeLabel(tourTypeValue) {
+        const template = document.getElementById("daily-plan-template")
+        if (!template) return tourTypeValue
+
+        const option = template.content.querySelector(`[data-value="${tourTypeValue}"]`)
+        return option ? option.textContent.trim() : tourTypeValue
     }
 
     // Fetch destination children from API
@@ -579,7 +599,11 @@ class DailyPlanForm {
             { selector: ".collapsed-location", id: `collapsedLocation-${dayNumber}` },
             { selector: ".collapsed-city", id: `collapsedCity-${dayNumber}` },
             { selector: ".collapsed-tour-type", id: `collapsedTourType-${dayNumber}` },
-            { selector: ".city-section", id: `citySection-${dayNumber}` }
+            { selector: ".city-section", id: `citySection-${dayNumber}` },
+            { selector: ".guide-search", id: `guide-${dayNumber}`, name: `guide-${dayNumber}` },
+            { selector: ".guide-dropdown", id: `guideDropdown-${dayNumber}` },
+            { selector: ".itinerary-radio", name: `itinerary-${dayNumber}` },
+            { selector: ".food-radio", name: `food-${dayNumber}` }
         ]
 
         // Set IDs and basic attributes
@@ -599,6 +623,16 @@ class DailyPlanForm {
         // Set radio button names (multiple elements)
         dayElement.querySelectorAll(".location-radio").forEach(radio => {
             radio.name = `location-${dayNumber}`
+        })
+
+        // Set itinerary radio button names
+        dayElement.querySelectorAll(".itinerary-radio").forEach(radio => {
+            radio.name = `itinerary-${dayNumber}`
+        })
+
+        // Set food radio button names
+        dayElement.querySelectorAll(".food-radio").forEach(radio => {
+            radio.name = `food-${dayNumber}`
         })
 
         // Set room control data-day attributes
@@ -707,13 +741,106 @@ class DailyPlanForm {
         if (roomMinusBtn) roomMinusBtn.addEventListener("click", () => this.updateRoomCount(dayNumber, -1))
         if (roomPlusBtn) roomPlusBtn.addEventListener("click", () => this.updateRoomCount(dayNumber, 1))
 
+        // Guide search - Updated to show all on focus and search on input
+        const guideSearch = dayElement
+            ? dayElement.querySelector(`#guide-${dayNumber}`)
+            : document.getElementById(`guide-${dayNumber}`)
+
+        if (guideSearch) {
+            guideSearch.addEventListener("focus", (e) => {
+                this.showAllGuides(dayNumber)
+            })
+            guideSearch.addEventListener("blur", (e) => {
+                // Check if blur is caused by clicking inside dropdown
+                setTimeout(() => {
+                    const dropdown = document.getElementById(`guideDropdown-${dayNumber}`)
+                    const activeElement = document.activeElement
+
+                    // Don't close if focus is on dropdown search input or dropdown contains active element
+                    if (dropdown &&
+                        !dropdown.contains(activeElement) &&
+                        !activeElement?.classList.contains('dropdown-search-input')) {
+                        dropdown.style.display = "none"
+                    }
+                }, 150)
+            })
+        }
+
+        // Handle dropdown interactions
+        setTimeout(() => {
+            const dropdown = document.getElementById(`guideDropdown-${dayNumber}`)
+            const dropdownSearchInput = dropdown?.querySelector('.dropdown-search-input')
+
+            if (dropdown) {
+                // Prevent dropdown from closing when clicking inside (except search input)
+                dropdown.addEventListener("mousedown", (e) => {
+                    // Only prevent default if not clicking on search input
+                    if (!e.target.classList.contains('dropdown-search-input')) {
+                        e.preventDefault()
+                    }
+                })
+
+                dropdown.addEventListener("click", (e) => {
+                    e.stopPropagation()
+                })
+
+                // Handle clicks outside to close dropdown
+                document.addEventListener("click", (e) => {
+                    if (!dropdown.contains(e.target) && !guideSearch?.contains(e.target)) {
+                        dropdown.style.display = "none"
+                    }
+                })
+            }
+
+            if (dropdownSearchInput) {
+                dropdownSearchInput.addEventListener("input", (e) => {
+                    this.searchGuides(dayNumber, e.target.value)
+                })
+
+                dropdownSearchInput.addEventListener("mousedown", (e) => {
+                    e.stopPropagation()
+                })
+
+                dropdownSearchInput.addEventListener("click", (e) => {
+                    e.stopPropagation()
+                    dropdownSearchInput.focus() // Ensure focus
+                })
+
+                dropdownSearchInput.addEventListener("focus", (e) => {
+                    e.stopPropagation()
+                })
+            }
+        }, 100)
+
+        // Itinerary selection
+        const itineraryRadios = dayElement
+            ? dayElement.querySelectorAll(`input[name="itinerary-${dayNumber}"]`)
+            : document.querySelectorAll(`input[name="itinerary-${dayNumber}"]`)
+        itineraryRadios.forEach((radio) => {
+            radio.addEventListener("change", () => {
+                this.updateItinerarySelection(dayNumber, radio.value)
+            })
+        })
+
+        // Food selection
+        const foodRadios = dayElement
+            ? dayElement.querySelectorAll(`input[name="food-${dayNumber}"]`)
+            : document.querySelectorAll(`input[name="food-${dayNumber}"]`)
+        foodRadios.forEach((radio) => {
+            radio.addEventListener("change", () => {
+                this.updateFoodSelection(dayNumber, radio.value)
+            })
+        })
+
         // Confirm day button
         const confirmBtn = dayElement
             ? dayElement.querySelector(`.confirm-day-btn[data-day="${dayNumber}"]`)
             : document.querySelector(`.confirm-day-btn[data-day="${dayNumber}"]`)
 
         if (confirmBtn) {
-            confirmBtn.addEventListener("click", () => {
+            confirmBtn.addEventListener("click", (e) => {
+                e.preventDefault() // Prevent form submission
+                e.stopPropagation() // Stop event bubbling
                 this.confirmDay(dayNumber)
             })
         }
@@ -722,7 +849,9 @@ class DailyPlanForm {
         setTimeout(() => {
             const seeDetailBtn = document.querySelector(`.see-detail-btn[data-day="${dayNumber}"]`)
             if (seeDetailBtn) {
-                seeDetailBtn.addEventListener("click", () => {
+                seeDetailBtn.addEventListener("click", (e) => {
+                    e.preventDefault() // Prevent form submission
+                    e.stopPropagation() // Stop event bubbling
                     this.expandDay(dayNumber)
                 })
             }
@@ -737,6 +866,7 @@ class DailyPlanForm {
                 this.updateCityOptions(dayNumber, firstRadio.value)
             }
             this.initTourTypeSearch(dayNumber)
+            this.initGuideDropdown(dayNumber)
         }, 50)
     }
 
@@ -834,9 +964,28 @@ class DailyPlanForm {
         const dropdown = document.getElementById(`cityDropdown-${dayNumber}`)
         if (!dropdown) return
 
-        if (this.currentCities[selectedRegion] && this.currentCities[selectedRegion].length > 0) {
-            dropdown.style.display = "block"
-        }
+        const cities = this.currentCities[selectedRegion] || []
+
+        dropdown.innerHTML = ""
+        dropdown.style.display = "block"
+
+        cities.forEach((city) => {
+            const option = document.createElement("div")
+            option.className = "dropdown-option"
+            option.textContent = city.label
+            option.addEventListener("click", () => {
+                const citySearch = document.getElementById(`city-${dayNumber}`)
+                citySearch.value = city.label
+                citySearch.dataset.value = city.value
+                dropdown.style.display = "none"
+
+                const tourTypeSearch = document.getElementById(`tourType-${dayNumber}`)
+                if (tourTypeSearch && tourTypeSearch.dataset.value) {
+                    this.loadTours(dayNumber, city.value, tourTypeSearch.dataset.value)
+                }
+            })
+            dropdown.appendChild(option)
+        })
     }
 
     searchCities(dayNumber, query) {
@@ -881,19 +1030,25 @@ class DailyPlanForm {
         dropdown.innerHTML = ""
         dropdown.style.display = "block"
 
-        this.tourTypes.forEach((type) => {
-            const option = document.createElement("div")
-            option.className = "dropdown-option"
-            option.textContent = type.label
+        // Get template and clone options from it
+        const template = document.getElementById("daily-plan-template")
+        if (!template) return
+
+        const templateOptions = template.content.querySelectorAll(".tour-type-dropdown .dropdown-option")
+        templateOptions.forEach((templateOption) => {
+            const option = templateOption.cloneNode(true)
             option.addEventListener("click", () => {
                 const tourTypeSearch = document.getElementById(`tourType-${dayNumber}`)
-                tourTypeSearch.value = type.label
-                tourTypeSearch.dataset.value = type.value
+                const value = option.getAttribute("data-value")
+                const label = option.textContent.trim()
+
+                tourTypeSearch.value = label
+                tourTypeSearch.dataset.value = value
                 dropdown.style.display = "none"
 
                 const citySearch = document.getElementById(`city-${dayNumber}`)
                 if (citySearch && citySearch.dataset.value) {
-                    this.loadTours(dayNumber, citySearch.dataset.value, type.value)
+                    this.loadTours(dayNumber, citySearch.dataset.value, value)
                 }
             })
             dropdown.appendChild(option)
@@ -914,27 +1069,36 @@ class DailyPlanForm {
     }
 
     searchTourTypes(dayNumber, query) {
-        const filteredTypes = this.tourTypes.filter((type) => type.label.toLowerCase().includes(query.toLowerCase()))
-
         const dropdown = document.getElementById(`tourTypeDropdown-${dayNumber}`)
         if (!dropdown) return
 
         dropdown.innerHTML = ""
-        dropdown.style.display = filteredTypes.length > 0 ? "block" : "none"
 
-        filteredTypes.forEach((type) => {
-            const option = document.createElement("div")
-            option.className = "dropdown-option"
-            option.textContent = type.label
+        // Get template and filter options from it
+        const template = document.getElementById("daily-plan-template")
+        if (!template) return
+
+        const templateOptions = template.content.querySelectorAll(".tour-type-dropdown .dropdown-option")
+        const filteredOptions = Array.from(templateOptions).filter(option =>
+            option.textContent.trim().toLowerCase().includes(query.toLowerCase())
+        )
+
+        dropdown.style.display = filteredOptions.length > 0 ? "block" : "none"
+
+        filteredOptions.forEach((templateOption) => {
+            const option = templateOption.cloneNode(true)
             option.addEventListener("click", () => {
                 const tourTypeSearch = document.getElementById(`tourType-${dayNumber}`)
-                tourTypeSearch.value = type.label
-                tourTypeSearch.dataset.value = type.value
+                const value = option.getAttribute("data-value")
+                const label = option.textContent.trim()
+
+                tourTypeSearch.value = label
+                tourTypeSearch.dataset.value = value
                 dropdown.style.display = "none"
 
                 const citySearch = document.getElementById(`city-${dayNumber}`)
                 if (citySearch && citySearch.dataset.value) {
-                    this.loadTours(dayNumber, citySearch.dataset.value, type.value)
+                    this.loadTours(dayNumber, citySearch.dataset.value, value)
                 }
             })
             dropdown.appendChild(option)
@@ -988,7 +1152,7 @@ class DailyPlanForm {
             setTimeout(() => {
                 const destinationLabels = this.currentCities[destination] ?
                     this.currentCities[destination].find(c => c.value === destination)?.label || destination : destination
-                const tourTypeLabels = this.tourTypes.find(t => t.value === tourType)?.label || tourType
+                const tourTypeLabels = this.getTourTypeLabel(tourType)
 
                 const mockTours = [
                     {
@@ -1164,6 +1328,19 @@ class DailyPlanForm {
         const selectedTour = document.querySelector(`#tourCards-${dayNumber} .tour-card.selected`)
         const roomCount = Number.parseInt(document.getElementById(`roomCount-${dayNumber}`).textContent) || 0
 
+        // Get guide selection
+        const guideSearch = document.getElementById(`guide-${dayNumber}`)
+        const guide = guideSearch ? guideSearch.value : ''
+        const guideValue = guideSearch ? guideSearch.dataset.value : ''
+
+        // Get itinerary selection
+        const itineraryRadio = document.querySelector(`input[name="itinerary-${dayNumber}"]:checked`)
+        const itinerary = itineraryRadio ? itineraryRadio.value : ''
+
+        // Get food selection
+        const foodRadio = document.querySelector(`input[name="food-${dayNumber}"]:checked`)
+        const food = foodRadio ? foodRadio.value : ''
+
         // Get tour info from dailyPlans
         const tourData = this.dailyPlans[dayNumber]?.selectedTourData || {}
 
@@ -1183,6 +1360,10 @@ class DailyPlanForm {
             selectedTour: selectedTour ? selectedTour.dataset.tourId : null,
             selectedTourData: tourData,
             roomCount,
+            guide,
+            guideValue,
+            itinerary,
+            food,
             services,
             confirmed: true,
         }
@@ -1207,8 +1388,18 @@ class DailyPlanForm {
                 <p><strong>Rooms:</strong> ${dayData.roomCount}</p>
                 ${dayData.selectedTourData.price ? `<p><strong>Price:</strong> $${dayData.selectedTourData.price}</p>` : ''}
             </div>
-            <button class="see-detail-btn" data-day="${dayNumber}">See Details</button>
+            <button type="button" class="see-detail-btn" data-day="${dayNumber}">See Details</button>
         `
+
+        // Add event listener for the dynamically created See Details button
+        const seeDetailBtn = collapsedContent.querySelector(".see-detail-btn")
+        if (seeDetailBtn) {
+            seeDetailBtn.addEventListener("click", (e) => {
+                e.preventDefault() // Prevent form submission
+                e.stopPropagation() // Stop event bubbling
+                this.expandDay(dayNumber)
+            })
+        }
     }
 
     expandDay(dayNumber) {
@@ -1273,6 +1464,122 @@ class DailyPlanForm {
         }
 
         console.log(`Day ${dayNumber} set as free day and sidebar updated`)
+    }
+
+    // Guide dropdown methods
+    initGuideDropdown(dayNumber) {
+        // Initialize guide dropdown with options
+    }
+
+    showAllGuides(dayNumber) {
+        const dropdown = document.getElementById(`guideDropdown-${dayNumber}`)
+        if (!dropdown) return
+
+        const optionsContainer = dropdown.querySelector(".dropdown-options-container")
+        if (!optionsContainer) return
+
+        optionsContainer.innerHTML = ""
+        dropdown.style.display = "block"
+
+        this.guideOptions.forEach((guide) => {
+            const option = document.createElement("div")
+            option.className = "dropdown-option"
+            option.setAttribute("data-lang", guide.value)
+            option.innerHTML = `${guide.flag} ${guide.label}`
+            option.addEventListener("click", () => {
+                const guideSearch = document.getElementById(`guide-${dayNumber}`)
+                guideSearch.value = `${guide.flag} ${guide.label}`
+                guideSearch.dataset.value = guide.value
+                dropdown.style.display = "none"
+            })
+            optionsContainer.appendChild(option)
+        })
+
+        // Focus on search input after dropdown is shown
+        setTimeout(() => {
+            const searchInput = dropdown.querySelector(".dropdown-search-input")
+            if (searchInput) {
+                searchInput.focus()
+            }
+        }, 50)
+    }
+
+    // Search guides by name
+    searchGuides(dayNumber, query) {
+        const dropdown = document.getElementById(`guideDropdown-${dayNumber}`)
+        if (!dropdown) return
+
+        const optionsContainer = dropdown.querySelector(".dropdown-options-container")
+        if (!optionsContainer) return
+
+        optionsContainer.innerHTML = ""
+
+        const filteredGuides = this.guideOptions.filter(guide =>
+            guide.label.toLowerCase().includes(query.toLowerCase())
+        )
+
+        dropdown.style.display = "block" // Always show dropdown when searching
+
+        if (filteredGuides.length === 0) {
+            const noResults = document.createElement("div")
+            noResults.className = "dropdown-option no-results"
+            noResults.innerHTML = "No guides found"
+            noResults.style.color = "#999"
+            noResults.style.fontStyle = "italic"
+            optionsContainer.appendChild(noResults)
+        } else {
+            filteredGuides.forEach((guide) => {
+                const option = document.createElement("div")
+                option.className = "dropdown-option"
+                option.setAttribute("data-lang", guide.value)
+                option.innerHTML = `${guide.flag} ${guide.label}`
+                option.addEventListener("click", () => {
+                    const guideSearch = document.getElementById(`guide-${dayNumber}`)
+                    guideSearch.value = `${guide.flag} ${guide.label}`
+                    guideSearch.dataset.value = guide.value
+                    dropdown.style.display = "none"
+                })
+                optionsContainer.appendChild(option)
+            })
+        }
+    }
+
+    // Itinerary selection method
+    updateItinerarySelection(dayNumber, value) {
+        // Store itinerary selection
+        this.dailyPlans[dayNumber] = {
+            ...this.dailyPlans[dayNumber],
+            itinerary: value
+        }
+        console.log(`Day ${dayNumber} itinerary updated:`, value)
+    }
+
+    // Food selection method
+    updateFoodSelection(dayNumber, value) {
+        // Store food selection
+        this.dailyPlans[dayNumber] = {
+            ...this.dailyPlans[dayNumber],
+            food: value
+        }
+
+        // Update food gallery title based on selection
+        const foodImages = document.querySelector(`#day-${dayNumber} .food-images h4`)
+        if (foodImages) {
+            const selectedFood = this.getFoodOptionLabel(value)
+            foodImages.textContent = `Images for ${selectedFood}`
+        }
+
+        console.log(`Day ${dayNumber} food updated:`, value)
+    }
+
+    getFoodOptionLabel(value) {
+        const foodOptions = {
+            'vietnamese': 'Vietnam Cuisine',
+            'seafood': 'Premium Seafood Buffet',
+            'michelin': 'Michelin - Recommended Dining',
+            'french': 'French Fine Dining'
+        }
+        return foodOptions[value] || 'Selected Food'
     }
 
     validateForm() {

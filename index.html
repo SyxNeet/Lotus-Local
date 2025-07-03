@@ -431,7 +431,7 @@
 
                                             <div class="itinerary-options">
                                                 <label class="itinerary-option selected">
-                                                    <input type="radio" name="itinerary-1" value="standard" checked>
+                                                    <input type="radio" name="itinerary-1" value="standard">
                                                     <span class="radio-custom"></span>
                                                     <div class="itinerary-details">
                                                         <h4>Hanoi classic 1 day tour</h4>
@@ -452,7 +452,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Images for Fortune 7 seats -->
+                                        <!-- Vehicle Section -->
                                         <div class="vehicle-section">
                                             <h3>Images for Fortune 7 seats</h3>
                                             <p class="section-subtitle">Suitable for tour from: <strong>2 -
@@ -463,6 +463,86 @@
                                                 <img src="/placeholder.svg?height=100&width=150" alt="Vehicle 2">
                                                 <img src="/placeholder.svg?height=100&width=150" alt="Vehicle 3">
                                                 <img src="/placeholder.svg?height=100&width=150" alt="Vehicle 4">
+                                            </div>
+                                        </div>
+
+                                        <!-- Tour Guide -->
+                                        <div class="guide-section">
+                                            <div class="guide-header">
+                                                <h3>Tour guide</h3>
+                                                <p class="section-date">Day 1: 2025/05/29</p>
+                                            </div>
+                                            <p class="guide-description">Choose a tour guide whose language is
+                                                appropriate for you. It will make your trip more effective.</p>
+
+                                            <div class="form-group">
+                                                <label class="guide-label required">Please select the tour guide you
+                                                    want</label>
+                                                <div class="searchable-select">
+                                                    <input type="text" class="guide-search"
+                                                        placeholder="Please select the tour guide you want" readonly>
+                                                    <div class="search-dropdown guide-dropdown">
+                                                        <div class="dropdown-search-container">
+                                                            <input type="text" class="dropdown-search-input"
+                                                                placeholder="Enter the tour guide you want">
+                                                        </div>
+                                                        <div class="dropdown-options-container">
+                                                            <!-- Guide options will be populated by JavaScript -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Food and Drink Section -->
+                                        <div class="food-section">
+                                            <div class="food-header">
+                                                <h3>Food and Drink</h3>
+                                                <p class="section-date">Day 1: 2025/05/29</p>
+                                            </div>
+
+                                            <div class="food-options">
+                                                <label class="food-option">
+                                                    <input type="radio" class="food-radio" value="vietnamese" checked>
+                                                    <div class="food-details">
+                                                        <h4 class="food-title">Vietnam Cuisine</h4>
+                                                        <p class="food-price">10usd/pax x4</p>
+                                                    </div>
+                                                </label>
+
+                                                <label class="food-option">
+                                                    <input type="radio" class="food-radio" value="seafood">
+                                                    <div class="food-details">
+                                                        <h4 class="food-title">Premium Seafood Buffet</h4>
+                                                        <p class="food-price">20usd/pax x4</p>
+                                                    </div>
+                                                </label>
+
+                                                <label class="food-option">
+                                                    <input type="radio" class="food-radio" value="michelin">
+                                                    <div class="food-details">
+                                                        <h4 class="food-title">Michelin - Recommended Dining</h4>
+                                                        <p class="food-price">15usd/pax x4</p>
+                                                    </div>
+                                                </label>
+
+                                                <label class="food-option">
+                                                    <input type="radio" class="food-radio" value="french">
+                                                    <div class="food-details">
+                                                        <h4 class="food-title">French Fine Dining</h4>
+                                                        <p class="food-price">25usd/pax x4</p>
+                                                    </div>
+                                                </label>
+                                            </div>
+
+                                            <div class="food-images">
+                                                <h4>Images for Michelin - Recommended Dining</h4>
+                                                <div class="food-gallery">
+                                                    <img src="/placeholder.svg?height=100&width=150" alt="Food 1">
+                                                    <img src="/placeholder.svg?height=100&width=150" alt="Food 2">
+                                                    <img src="/placeholder.svg?height=100&width=150" alt="Food 3">
+                                                    <img src="/placeholder.svg?height=100&width=150" alt="Food 4">
+                                                </div>
                                             </div>
                                         </div>
 
@@ -525,27 +605,6 @@
                                                         No need
                                                     </label>
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Tour Guide -->
-                                        <div class="guide-section">
-                                            <div class="guide-header">
-                                                <h3>Tour guide</h3>
-                                                <p class="section-date">Day 1: 2025/05/29</p>
-                                            </div>
-                                            <p class="guide-description">Choose a tour guide whose language is
-                                                appropriate for you. It will make your trip more effective.</p>
-
-                                            <div class="form-group">
-                                                <select id="tourGuide-1" name="tourGuide-1">
-                                                    <option value="">Please select the tour guide you want</option>
-                                                    <option value="english" selected>English Speaking Guide</option>
-                                                    <option value="vietnamese">Vietnamese Speaking Guide</option>
-                                                    <option value="chinese">Chinese Speaking Guide</option>
-                                                    <option value="korean">Korean Speaking Guide</option>
-                                                    <option value="japanese">Japanese Speaking Guide</option>
-                                                </select>
                                             </div>
                                         </div>
 
@@ -893,7 +952,13 @@
                             <label class="tour-type-label required">Type of tour</label>
                             <div class="searchable-select">
                                 <input type="text" class="tour-type-search" placeholder="Search tour type...">
-                                <div class="search-dropdown tour-type-dropdown"></div>
+                                <div class="search-dropdown tour-type-dropdown">
+                                    <div class="dropdown-option" data-value="mini-tour">Mini Tour</div>
+                                    <div class="dropdown-option" data-value="package-tour">Package Tour</div>
+                                    <div class="dropdown-option" data-value="real-estate-combined-tour">Real Estate
+                                        Combined Tour</div>
+                                    <div class="dropdown-option" data-value="tour-golf">Tour Golf</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -912,6 +977,142 @@
                     </div>
                 </div>
 
+                <!-- Tour Itinerary -->
+                <div class="itinerary-section">
+                    <div class="itinerary-header">
+                        <p class="section-title">Tour itinerary</p>
+                        <p class="section-date">Day <span class="day-number-text"></span>: <span
+                                class="section-date-text"></span></p>
+                    </div>
+
+                    <div class="itinerary-options">
+                        <label class="itinerary-option">
+                            <input type="radio" class="itinerary-radio" value="standard">
+                            <div class="itinerary-details">
+                                <h4 class="itinerary-title">Hanoi classic 1 day tour</h4>
+                                <p class="itinerary-description">Standard car for 4 pax price 500 USD</p>
+                                <small class="itinerary-includes">Includes: Ticket + Tour guide</small>
+                            </div>
+                        </label>
+
+                        <label class="itinerary-option">
+                            <input type="radio" class="itinerary-radio" value="vip">
+                            <div class="itinerary-details">
+                                <h4 class="itinerary-title">Hanoi classic 1 day tour</h4>
+                                <p class="itinerary-description">VIP car for 4 pax price 800 USD</p>
+                                <small class="itinerary-includes">Includes: Ticket + Tour guide</small>
+                            </div>
+                        </label>
+                    </div>
+                    <!-- Vehicle Section -->
+                    <div class="vehicle-section">
+                        <div class="vehicle-header">
+                            <p class="section-title">Images for Fortune 7 seats</p>
+                            <p class="vehicle-subtitle">Suitable for tour from: <strong>2 - 4pax</strong></p>
+                        </div>
+
+                        <div class="vehicle-images">
+                            <img src="https://lotus.okhub-tech.com/wp-content/uploads/2025/07/f8db611af1aa926ea29a0ff936ef26f4b3e33a12.png"
+                                alt="Vehicle 1">
+                            <img src="https://lotus.okhub-tech.com/wp-content/uploads/2025/07/f8db611af1aa926ea29a0ff936ef26f4b3e33a12.png"
+                                alt="Vehicle 2">
+                            <img src="https://lotus.okhub-tech.com/wp-content/uploads/2025/07/f8db611af1aa926ea29a0ff936ef26f4b3e33a12.png"
+                                alt="Vehicle 3">
+                            <img src="https://lotus.okhub-tech.com/wp-content/uploads/2025/07/f8db611af1aa926ea29a0ff936ef26f4b3e33a12.png"
+                                alt="Vehicle 4">
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Tour Guide -->
+                <div class="guide-section">
+                    <div class="guide-header">
+                        <p class="section-title">Tour guide</p>
+                        <p class="section-date">Day <span class="day-number-text"></span>: <span
+                                class="section-date-text"></span></p>
+                    </div>
+                    <p class="guide-description">Choose a tour guide whose language is appropriate for you. It will make
+                        your trip more effective.</p>
+
+                    <div class="form-group">
+                        <label class="guide-label required">Please select the tour guide you want</label>
+                        <div class="searchable-select">
+                            <input type="text" class="guide-search" placeholder="Please select the tour guide you want"
+                                readonly>
+                            <div class="search-dropdown guide-dropdown">
+                                <div class="dropdown-search-container">
+                                    <input type="text" class="dropdown-search-input"
+                                        placeholder="Enter the tour guide you want">
+                                </div>
+                                <div class="dropdown-options-container">
+                                    <!-- Guide options will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food and Drink -->
+                <div class="food-section">
+                    <div class="food-header">
+                        <p class="section-title">Food and Drink</p>
+                        <p class="section-date">Day <span class="day-number-text"></span>: <span
+                                class="section-date-text"></span></p>
+                    </div>
+
+                    <div class="food-options">
+                        <label class="food-option">
+                            <input type="radio" class="food-radio" value="vietnamese" checked>
+                            <div class="food-details">
+                                <h4 class="food-title">Vietnam Cuisine</h4>
+                                <p class="food-price">10usd/<span>pax</span> x4</p>
+                            </div>
+                        </label>
+
+                        <label class="food-option">
+                            <input type="radio" class="food-radio" value="seafood">
+                            <div class="food-details">
+                                <h4 class="food-title">Premium Seafood Buffet</h4>
+                                <p class="food-price">20usd/<span>pax</span> x4</p>
+                            </div>
+                        </label>
+
+                        <label class="food-option">
+                            <input type="radio" class="food-radio" value="michelin">
+                            <div class="food-details">
+                                <h4 class="food-title">Michelin - Recommended Dining</h4>
+                                <p class="food-price">15usd/<span>pax</span> x4</p>
+                            </div>
+                        </label>
+
+                        <label class="food-option">
+                            <input type="radio" class="food-radio" value="french">
+                            <div class="food-details">
+                                <h4 class="food-title">French Fine Dining</h4>
+                                <p class="food-price">25usd/<span>pax</span> x4</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="food-images">
+                        <div class="food-images-header">
+                            <p>Images for Michelin - Recommended Dining</p>
+                        </div>
+                        <div class="food-gallery">
+                            <img src="https://lotus.okhub-tech.com/wp-content/uploads/2025/07/254c9c1bbac6722708581a7c7511a3ab9eafde97.png"
+                                alt="Food 1">
+                            <img src="https://lotus.okhub-tech.com/wp-content/uploads/2025/07/254c9c1bbac6722708581a7c7511a3ab9eafde97.png"
+                                alt="Food 2">
+                            <img src="https://lotus.okhub-tech.com/wp-content/uploads/2025/07/254c9c1bbac6722708581a7c7511a3ab9eafde97.png"
+                                alt="Food 3">
+                            <img src="https://lotus.okhub-tech.com/wp-content/uploads/2025/07/254c9c1bbac6722708581a7c7511a3ab9eafde97.png"
+                                alt="Food 4">
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Select Hotel -->
                 <div class="hotel-section">
                     <div class="hotel-header">
@@ -921,7 +1122,7 @@
                     </div>
 
                     <div class="room-selector">
-                        <label>Select number of rooms</label>
+                        <p>Select number of rooms</p>
                         <div class="room-controls">
                             <button type="button" class="room-btn minus">-</button>
                             <span class="room-count">00</span>

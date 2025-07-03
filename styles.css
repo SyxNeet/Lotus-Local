@@ -836,7 +836,8 @@ body {
   font-size: 0.875rem;
   color: #6b7280;
   margin-bottom: 1rem;
-} */
+}
+
 /* 
 ===============================
 ===============================
@@ -1160,10 +1161,10 @@ body {
 }
 
 /* Hotel Section Styles */
-.room-selector {
+#container__customize .room-selector {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    justify-content: space-between;
     margin-bottom: 1rem;
 }
 
@@ -1767,7 +1768,6 @@ body {
 ========================
 ========================
 ========================
-========================
 ========================   */
 
 /* Additional Styles */
@@ -2005,4 +2005,357 @@ body {
 
 .city-section.hidden {
     display: none !important;
+}
+/* Tour Itinerary Section */
+#container__customize .itinerary-section {
+    margin-bottom: 1.25rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: #f5f5f5;
+}
+
+#container__customize .itinerary-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+#container__customize .itinerary-section .section-title {
+    color: var(--text-body-text-text-body-100, #1A1A1A);
+    font-family: "SVN-Lagu Sans";
+    font-size: 1.125rem;
+    font-weight: 800;
+    line-height: 120%;
+    letter-spacing: -0.01125rem;
+}
+
+#container__customize .itinerary-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+#container__customize .itinerary-option {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 0.75rem;
+    border: 0.6px solid rgba(161, 161, 161, 0.60);
+    background: var(--white-white-100, #FFF);
+}
+
+#container__customize .itinerary-option:hover {
+    border-color: #158E5C;
+}
+
+#container__customize .itinerary-option input[type="radio"] {
+    accent-color: #158E5C;
+    margin-top: 0.25rem;
+}
+
+#container__customize .itinerary-details .itinerary-title {
+    color: var(--text-body-text-text-body-60, rgba(26, 26, 26, 0.60));
+    font-family: Manrope;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%;
+    letter-spacing: -0.00875rem;
+}
+
+#container__customize .itinerary-details .itinerary-description {
+    color: var(--text-body-text-text-body-100, #1A1A1A);
+    font-family: Manrope;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+    letter-spacing: -0.0175rem;
+}
+
+#container__customize .itinerary-details .itinerary-includes {
+    color: var(--text-body-text-text-body-60, rgba(26, 26, 26, 0.60));
+    font-family: Manrope;
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.015rem;
+}
+
+/* Vehicle Section */
+#container__customize .vehicle-section {
+    margin-top: 1rem;
+}
+
+#container__customize .vehicle-header {
+    margin-bottom: 0.75rem;
+    display: flex;
+    padding: 0.75rem 1rem;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 0.5rem;
+    background: #E9E8DE;
+}
+
+#container__customize .vehicle-section .section-title {
+    color: #000;
+    text-align: center;
+    font-family: Manrope;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+    letter-spacing: -0.0175rem;
+}
+
+#container__customize .vehicle-subtitle {
+    color: var(--text-body-text-text-body-60, rgba(26, 26, 26, 0.60));
+    text-align: center;
+    font-family: Manrope;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%;
+    letter-spacing: -0.00875rem;
+}
+#container__customize .vehicle-subtitle strong {
+    font-weight: 600;
+    color: #000;
+}
+#container__customize .vehicle-images {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+}
+
+#container__customize .vehicle-images img {
+    width: 100%;
+    height: 6.0625rem;
+    object-fit: cover;
+    border-radius: 0.75rem;
+}
+
+/* Guide Section */
+#container__customize .guide-section {
+    margin-bottom: 1.25rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: #f5f5f5;
+}
+
+#container__customize .guide-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+#container__customize .guide-section .section-title {
+    color: var(--text-body-text-text-body-100, #1A1A1A);
+    font-family: "SVN-Lagu Sans";
+    font-size: 1.125rem;
+    font-weight: 800;
+    line-height: 120%;
+    letter-spacing: -0.01125rem;
+}
+
+#container__customize .guide-description {
+    color: var(--text-body-text-text-body-60, rgba(26, 26, 26, 0.60));
+    font-family: Manrope;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 150%;
+    margin-bottom: 1rem;
+}
+
+#container__customize .guide-search {
+    cursor: pointer;
+}
+
+/* Food Section */
+#container__customize .food-section {
+    margin-bottom: 1.25rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: #f5f5f5;
+}
+
+#container__customize .food-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+#container__customize .food-section .section-title {
+    color: var(--text-body-text-text-body-100, #1A1A1A);
+    font-family: "SVN-Lagu Sans";
+    font-size: 1.125rem;
+    font-weight: 800;
+    line-height: 120%;
+    letter-spacing: -0.01125rem;
+}
+
+#container__customize .food-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+#container__customize .food-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#container__customize .food-option:hover {
+    border-color: #158E5C;
+}
+
+#container__customize .food-option input[type="radio"] {
+    accent-color: #158E5C;
+}
+
+#container__customize .food-details .food-title {
+    color: var(--text-body-text-text-body-100, #1A1A1A);
+    font-family: Manrope;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+    letter-spacing: -0.0175rem;
+}
+
+#container__customize .food-details .food-price {
+    color: var(--text-body-text-text-body-100, #1A1A1A);
+    font-family: Manrope;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+    letter-spacing: -0.0175rem;
+}
+#container__customize .food-details .food-price span {
+    color: var(--text-body-text-text-body-40, rgba(26, 26, 26, 0.40));
+}
+
+#container__customize .food-images-header{
+    margin-bottom: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background: #E9E8DE;
+}
+#container__customize .food-images-header p {
+    color: #000;
+    font-family: Manrope;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+    letter-spacing: -0.0175rem;
+}
+
+#container__customize .food-gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+}
+
+#container__customize .food-gallery img {
+    width: 100%;
+    height: 6.0625rem;
+    object-fit: cover;
+    border-radius: 0.75rem;
+}
+
+/* Enhanced Popup Styles */
+#container__customize .search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 20;
+    display: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    margin-top: 0.5rem;
+}
+
+#container__customize .dropdown-option {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #f3f4f6;
+    color: var(--text-body-text-text-body-100, #1A1A1A);
+    font-family: Manrope;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 150%;
+    transition: all 0.2s;
+}
+
+#container__customize .dropdown-option:hover {
+    background: #f8fffe;
+    color: var(--Color-Buttons-Green, #2E7658);
+}
+
+#container__customize .dropdown-option:last-child {
+    border-bottom: none;
+}
+
+#container__customize .dropdown-option.selected {
+    background: #f0f9ff;
+    color: var(--Color-Buttons-Green, #2E7658);
+    font-weight: 600;
+}
+
+/* Specific popup positioning */
+#container__customize .location-details .searchable-select {
+    position: relative;
+}
+
+#container__customize .guide-section .searchable-select {
+    position: relative;
+}
+
+/* Guide dropdown specific styling */
+#container__customize .guide-dropdown .dropdown-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#container__customize .guide-dropdown .dropdown-option::before {
+    content: "";
+    width: 1.5rem;
+    height: 1rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#container__customize .guide-dropdown .dropdown-option[data-lang="english"]::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16'%3E%3Crect width='24' height='16' fill='%23012169'/%3E%3C/svg%3E");
+}
+
+#container__customize .guide-dropdown .dropdown-option[data-lang="vietnamese"]::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16'%3E%3Crect width='24' height='16' fill='%23DA020E'/%3E%3C/svg%3E");
+}
+
+#container__customize .guide-dropdown .dropdown-option[data-lang="chinese"]::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16'%3E%3Crect width='24' height='16' fill='%23DE2910'/%3E%3C/svg%3E");
 }
