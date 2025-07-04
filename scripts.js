@@ -635,6 +635,16 @@ class DailyPlanForm {
             radio.name = `food-${dayNumber}`
         })
 
+        // Set hotel radio button names
+        dayElement.querySelectorAll(".hotel-radio").forEach(radio => {
+            radio.name = `hotel-${dayNumber}`
+        })
+
+        // Set extra bed radio button names
+        dayElement.querySelectorAll(".extra-bed-radio").forEach(radio => {
+            radio.name = `extra-bed-${dayNumber}`
+        })
+
         // Set room control data-day attributes
         dayElement.querySelectorAll(".room-btn").forEach(btn => {
             btn.setAttribute("data-day", dayNumber)
@@ -829,6 +839,26 @@ class DailyPlanForm {
         foodRadios.forEach((radio) => {
             radio.addEventListener("change", () => {
                 this.updateFoodSelection(dayNumber, radio.value)
+            })
+        })
+
+        // Hotel selection
+        const hotelRadios = dayElement
+            ? dayElement.querySelectorAll(`input[name="hotel-${dayNumber}"]`)
+            : document.querySelectorAll(`input[name="hotel-${dayNumber}"]`)
+        hotelRadios.forEach((radio) => {
+            radio.addEventListener("change", () => {
+                this.updateHotelSelection(dayNumber, radio.value)
+            })
+        })
+
+        // Extra bed selection
+        const extraBedRadios = dayElement
+            ? dayElement.querySelectorAll(`input[name="extra-bed-${dayNumber}"]`)
+            : document.querySelectorAll(`input[name="extra-bed-${dayNumber}"]`)
+        extraBedRadios.forEach((radio) => {
+            radio.addEventListener("change", () => {
+                this.updateExtraBedSelection(dayNumber, radio.value)
             })
         })
 
@@ -1254,6 +1284,12 @@ class DailyPlanForm {
         currentCount = Math.max(0, currentCount + change)
         roomCountElement.textContent = currentCount.toString().padStart(2, "0")
 
+        // Update room count in all hotel options
+        const hotelRoomCounts = document.querySelectorAll(`#day-${dayNumber} .hotel-room-count`)
+        hotelRoomCounts.forEach(element => {
+            element.textContent = currentCount
+        })
+
         // Store room count
         this.dailyPlans[dayNumber] = {
             ...this.dailyPlans[dayNumber],
@@ -1341,6 +1377,14 @@ class DailyPlanForm {
         const foodRadio = document.querySelector(`input[name="food-${dayNumber}"]:checked`)
         const food = foodRadio ? foodRadio.value : ''
 
+        // Get hotel selection
+        const hotelRadio = document.querySelector(`input[name="hotel-${dayNumber}"]:checked`)
+        const hotel = hotelRadio ? hotelRadio.value : ''
+
+        // Get extra bed selection
+        const extraBedRadio = document.querySelector(`input[name="extra-bed-${dayNumber}"]:checked`)
+        const extraBed = extraBedRadio ? extraBedRadio.value : ''
+
         // Get tour info from dailyPlans
         const tourData = this.dailyPlans[dayNumber]?.selectedTourData || {}
 
@@ -1364,6 +1408,8 @@ class DailyPlanForm {
             guideValue,
             itinerary,
             food,
+            hotel,
+            extraBed,
             services,
             confirmed: true,
         }
@@ -1580,6 +1626,38 @@ class DailyPlanForm {
             'french': 'French Fine Dining'
         }
         return foodOptions[value] || 'Selected Food'
+    }
+
+    // Hotel selection method
+    updateHotelSelection(dayNumber, value) {
+        // Store hotel selection
+        this.dailyPlans[dayNumber] = {
+            ...this.dailyPlans[dayNumber],
+            hotel: value
+        }
+
+        // Update selected hotel name in images section
+        const selectedHotelName = document.querySelector(`#day-${dayNumber} .selected-hotel-name`)
+        if (selectedHotelName) {
+            const hotelNames = {
+                'lotus-economy': 'Lotus Economy',
+                'lotus-deluxe': 'Lotus Deluxe',
+                'lotus-premium': 'Lotus Premium',
+                'lotus-vip': 'Lotus VIP'
+            }
+            selectedHotelName.textContent = hotelNames[value] || value
+        }
+    }
+
+    // Extra bed selection method
+    updateExtraBedSelection(dayNumber, value) {
+        // Store extra bed selection
+        this.dailyPlans[dayNumber] = {
+            ...this.dailyPlans[dayNumber],
+            extraBed: value
+        }
+
+        console.log(`Day ${dayNumber} extra bed updated:`, value)
     }
 
     validateForm() {
