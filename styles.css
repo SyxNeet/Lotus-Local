@@ -933,7 +933,7 @@ body {
 #container__customize .tour-section,
 #container__customize .hotel-section,
 #container__customize .services-section {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
     padding: 1rem;
     border-radius: 1rem;
     background: #f5f5f5;
@@ -1326,6 +1326,39 @@ body {
     border: 1px solid #e5e7eb;
 }
 
+/* Extra Bed Section */
+#container__customize .extra-bed-section {
+    margin-top: 20px;
+}
+
+#container__customize .room-note {
+    background: #f0f7ff;
+    border: 1px solid #d1e7ff;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+#container__customize .room-note .note-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+}
+
+#container__customize .room-note .note-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#container__customize .room-note .note-list li {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
 /* Extra Bed Options */
 #container__customize .extra-bed-options {
     display: flex;
@@ -1335,6 +1368,11 @@ body {
     background: #E9E8DE;
     padding: 1rem;
     width: 100%;
+}
+
+#container__customize .extra-bed-radio-group .radio-option .radio-custom {
+    display: inline-block;
+    margin-right: 8px;
 }
 
 #container__customize .extra-bed-text {
@@ -1421,7 +1459,7 @@ body {
 
 /* Day Actions */
 #container__customize .day-actions {
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
     text-align: center;
 }
 #container__customize .confirm-day-btn svg{
@@ -2245,7 +2283,7 @@ body {
 
 /* Guide Section */
 #container__customize .guide-section {
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.75rem;
     padding: 1rem;
     border-radius: 1rem;
     background: #f5f5f5;
@@ -2279,9 +2317,47 @@ body {
     cursor: pointer;
 }
 
+#container__customize .total-day{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 1rem;
+    background: var(--Color-BG-BG1, #F9F7F5);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+#container__customize .total-day .total-price-day{
+    color: var(--Map-Yellow, rgba(212, 171, 61, 0.90));
+    font-family: Manrope;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 150%;
+    letter-spacing: -0.0125rem;
+}
+#container__customize .total-day .section-title{
+    color: var(--text-body-text-text-body-100, #1A1A1A);
+    font-family: "SVN-Lagu Sans";
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 120%;
+    letter-spacing: 0.00281rem;
+    margin-bottom: 0.5rem;
+}
+#container__customize .total-day .section-subtitle{
+    color: var(--text-body-text-text-body-60, rgba(26, 26, 26, 0.60));
+    font-family: Manrope;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+    letter-spacing: -0.0175rem;
+}
 /* Food Section */
 #container__customize .food-section {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
     padding: 1rem;
     border-radius: 1rem;
     background: #f5f5f5;
@@ -2460,4 +2536,190 @@ body {
 
 #container__customize .guide-dropdown .dropdown-option[data-lang="chinese"]::before {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16'%3E%3Crect width='24' height='16' fill='%23DE2910'/%3E%3C/svg%3E");
+}
+
+/* Extra bed input group */
+#container__customize .extra-bed-input-group {
+    margin-top: 15px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+#container__customize .extra-bed-input-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #1A1A1A;
+    font-family: "SVN-Lagu Sans";
+    font-size: 0.875rem;
+    line-height: 120%;
+}
+
+#container__customize .extra-bed-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+#container__customize .extra-bed-selector .select-label {
+    display: flex;
+    align-items: center;
+}
+
+#container__customize .extra-bed-selector .select-label p {
+    color: #1a1a1a;
+    font-family: Manrope;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+}
+
+#container__customize .extra-bed-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#container__customize .extra-bed-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #ddd;
+    background-color: #d4a017;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.2s;
+    color: white;
+    border-color: #d4a017;
+}
+
+#container__customize .extra-bed-btn:hover {
+    background-color: #f0f0f0;
+    border-color: #ccc;
+}
+
+#container__customize .extra-bed-btn:active {
+    transform: scale(0.95);
+}
+
+#container__customize .extra-bed-count {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fff;
+    min-width: 40px;
+    text-align: center;
+    font-weight: bold;
+    font-family: Manrope;
+    font-size: 0.875rem;
+    color: #1A1A1A;
+}
+
+#container__customize .extra-bed-error {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #ffebee;
+    border-left: 4px solid #f44336;
+    border-radius: 4px;
+    font-family: Manrope;
+    font-size: 0.875rem;
+    color: #c62828;
+}
+
+/* Pax section for each day in customize mode */
+#container__customize .pax-section-day {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#container__customize .pax-section-day h3 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.2em;
+    font-family: "SVN-Lagu Sans";
+    font-weight: 800;
+    line-height: 120%;
+}
+
+#container__customize .pax-controls-day {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+#container__customize .pax-controls-day .pax-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#container__customize .pax-controls-day .pax-item label {
+    font-weight: 600;
+    color: #1A1A1A;
+    font-size: 0.875rem;
+    font-family: Manrope;
+}
+
+#container__customize .pax-controls-day .quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#container__customize .pax-controls-day .qty-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #ddd;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.2s;
+    color: #1A1A1A;
+}
+
+#container__customize .pax-controls-day .qty-btn:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+#container__customize .pax-controls-day .qty-btn:active {
+    transform: scale(0.95);
+}
+
+#container__customize .pax-controls-day .quantity-number {
+    min-width: 40px;
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+    font-family: Manrope;
+    font-size: 0.875rem;
+}
+
+#container__customize .total-pax-day {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    color: #007bff;
+    font-family: Manrope;
+    font-size: 0.875rem;
 }
