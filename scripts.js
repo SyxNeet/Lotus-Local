@@ -97,23 +97,15 @@ class VehicleManager {
 
     async fetchVehicle(pax, type, tourId) {
         try {
-            // Nếu không có tourId thì không fetch
             if (!tourId) {
-                console.warn('VehicleManager: No tour selected, cannot fetch vehicle')
                 return null
             }
-
-            console.log(`VehicleManager: Fetching vehicle for tourId=${tourId}, type=${type}, pax=${pax}`)
-
             const response = await fetch(`https://lotus.okhub-tech.com/wp-json/custom/v1/vehicle-options?type=${type}&pax=${pax}&post_id=${tourId}`)
 
             if (!response.ok) {
                 throw new Error(`Vehicle API response not ok: ${response.status}`)
             }
-
             const data = await response.json()
-            console.log(`VehicleManager: Vehicle data received:`, data)
-
             // Validate essential fields
             if (!data || typeof data !== 'object') {
                 throw new Error('Invalid vehicle data format')
@@ -121,8 +113,6 @@ class VehicleManager {
 
             return data
         } catch (error) {
-            console.error('VehicleManager: Error fetching vehicle from API:', error)
-
             // Return fallback data instead of null
             const fallbackData = {
                 title: `${type === 'vip' ? 'VIP' : 'Standard'} Vehicle`,
@@ -131,8 +121,6 @@ class VehicleManager {
                     "https://lotus.okhub-tech.com/wp-content/uploads/2025/07/f8db611af1aa926ea29a0ff936ef26f4b3e33a12.png"
                 ]
             }
-
-            console.log('VehicleManager: Using fallback data:', fallbackData)
             return fallbackData
         }
     }
@@ -797,11 +785,13 @@ class FormStateManager {
 class MultiStepBookingForm {
     constructor() {
         this.currentStep = 1
-        this.totalSteps = 4
+        this.totalSteps = 3
         this.formData = {}
         this.dailyPlans = {}
         this.container = document.querySelector("#container__customize .form-content")
         this.closeSidebar = document.querySelector(".close-sidebar")
+        // Don't store reference to element, always query fresh
+        console.log('MultiStepBookingForm constructor - will query totalPriceSidebar dynamically')
         this.init()
     }
 
@@ -842,6 +832,9 @@ class MultiStepBookingForm {
                 }
 
                 this.tourInfoForm.updateSidebar()
+            } else {
+                // Final step - submit booking
+                this.submitBooking()
             }
         }
     }
@@ -911,13 +904,40 @@ class MultiStepBookingForm {
 
         const prevBtn = document.getElementById("prevBtn")
         const nextBtn = document.getElementById("nextBtn")
+        const submitBtn = document.querySelector("#container__customize #submitForm")
 
         prevBtn.disabled = this.currentStep === 1
 
         if (this.currentStep === this.totalSteps) {
-            nextBtn.classList.add("complete-btn")
+            // Step 3 - hide next button and show submit button
+            nextBtn.style.display = 'none'
+            if (submitBtn) {
+                submitBtn.style.display = 'block'
+            }
+
+            // Show summary-total section on step 3
+            const summaryTotal = document.querySelector('.summary-total')
+            if (summaryTotal) {
+                summaryTotal.style.display = 'block'
+                summaryTotal.classList.add('active')
+            }
         } else {
+            // Other steps - show next button and hide submit button
+            nextBtn.style.display = 'block'
             nextBtn.classList.remove("complete-btn")
+            if (submitBtn) {
+                submitBtn.style.display = 'none'
+            }
+
+            // Hide summary-total section on other steps (unless there are confirmed days)
+            const hasConfirmedDays = this.dailyPlanForm && Object.values(this.dailyPlanForm.dailyPlans).some(dayData => dayData.confirmed)
+            if (!hasConfirmedDays) {
+                const summaryTotal = document.querySelector('.summary-total')
+                if (summaryTotal) {
+                    summaryTotal.style.display = 'none'
+                    summaryTotal.classList.remove('active')
+                }
+            }
         }
     }
 
@@ -935,6 +955,295 @@ class MultiStepBookingForm {
 
     getPaymentData() {
         return {}
+    }
+
+    // Collect complete booking data for submission
+    getCompleteBookingData() {
+        const tourInfo = this.tourInfoForm.getFormData()
+        const dailyPlanData = this.dailyPlanForm.getFormData()
+        const isCustomizeMode = this.tourInfoForm.isCustomizeMode()
+
+        // Get gift and coupon info
+        const giftInfo = this.getGiftAndCouponData()
+
+        // Prepare daily details based on pax mode
+        const dailyDetails = this.prepareDailyDetails(isCustomizeMode)
+
+        const completeData = {
+            // Basic tour information
+            totalDays: tourInfo.days,
+            startDate: tourInfo.startDate,
+            endDate: tourInfo.endDate,
+            paxMode: isCustomizeMode ? 'customize' : 'default',
+
+            // Pax information (for default mode)
+            pax: isCustomizeMode ? null : {
+                adults: tourInfo.adults,
+                children: tourInfo.children1 + tourInfo.children2 + tourInfo.children3,
+                children1: tourInfo.children1, // 0-2 years (Free)
+                children2: tourInfo.children2, // 3-6 years (60%)
+                children3: tourInfo.children3, // 7-12 years (80%)
+                totalPax: tourInfo.totalPax
+            },
+
+            // Gift and coupon
+            gift: giftInfo.gift,
+            coupon: giftInfo.coupon,
+
+            // Pricing
+            totalPrice: this.dailyPlanForm.grandTotal || 0,
+            priceBreakdown: this.getPriceBreakdown(),
+
+            // Daily details
+            dailyDetails: dailyDetails,
+
+            // Contact and payment info
+            contactInfo: this.getContactData(),
+            paymentInfo: this.getPaymentData(),
+
+            // Metadata
+            submittedAt: new Date().toISOString(),
+            formVersion: '1.0'
+        }
+
+        return completeData
+    }
+
+    // Get gift and coupon information
+    getGiftAndCouponData() {
+        const giftElement = document.querySelector('#sidebar-gift')
+        const couponElement = document.querySelector('.coupon-section input') // Adjust selector as needed
+
+        return {
+            gift: giftElement ? giftElement.textContent || 'Default Gift' : null,
+            coupon: couponElement ? couponElement.value || null : null
+        }
+    }
+
+    // Prepare daily details based on pax mode
+    prepareDailyDetails(isCustomizeMode) {
+        const dailyDetails = []
+        const dailyPlans = this.dailyPlanForm.dailyPlans
+
+        Object.keys(dailyPlans).forEach(dayNumber => {
+            const dayData = dailyPlans[dayNumber]
+
+            if (dayData.confirmed || dayData.noService) {
+                const dayDetail = this.prepareSingleDayDetail(parseInt(dayNumber), dayData, isCustomizeMode)
+                dailyDetails.push(dayDetail)
+            }
+        })
+
+        // Sort by day number
+        return dailyDetails.sort((a, b) => a.day - b.day)
+    }
+
+    // Prepare single day detail
+    prepareSingleDayDetail(dayNumber, dayData, isCustomizeMode) {
+        const dayDetail = {
+            day: dayNumber,
+            date: this.calculateDayDate(dayNumber),
+            status: dayData.noService ? 'no-service' : 'confirmed'
+        }
+
+        // Add pax info for customize mode
+        if (isCustomizeMode && !dayData.noService) {
+            const dayPaxData = this.tourInfoForm.getDayPaxCount(dayNumber)
+            dayDetail.pax = {
+                adults: dayPaxData.adults,
+                children: dayPaxData.children,
+                children1: dayPaxData.children1,
+                children2: dayPaxData.children2,
+                children3: dayPaxData.children3,
+                totalPax: dayPaxData.totalPax
+            }
+        }
+
+        // Add tour and service details for confirmed days
+        if (!dayData.noService) {
+            dayDetail.tour = {
+                name: dayData.selectedTourData?.name || 'Selected Tour',
+                code: dayData.selectedTourData?.id || dayData.selectedTour,
+                location: this.getLocationLabel(dayData.location),
+                city: dayData.city,
+                tourType: dayData.tourType
+            }
+
+            dayDetail.vehicle = {
+                type: dayData.itinerary === 'standard' ? 'Standard car' : 'VIP car',
+                itinerary: dayData.itinerary
+            }
+
+            dayDetail.tourGuide = {
+                language: this.getGuideLanguage(dayData.guideValue),
+                selection: dayData.guide
+            }
+
+            dayDetail.restaurant = {
+                type: this.getFoodLabel(dayData.food),
+                selection: dayData.food
+            }
+
+            dayDetail.hostel = {
+                type: this.getHotelLabel(dayData.hotel),
+                selection: dayData.hotel,
+                roomCount: dayData.roomCount || 0,
+                extraBed: dayData.extraBed === 'add-extra-bed' ? 'Yes' : 'No',
+                extraBedCount: dayData.extraBedCount || 0
+            }
+
+            dayDetail.otherServices = this.getOtherServices(dayData.services || [])
+
+            dayDetail.pricing = {
+                dayTotal: dayData.totalPrice || 0,
+                vehiclePrice: dayData.vehicle?.calculatedPrice || 0,
+                hotelPrice: this.calculateHotelPrice(dayData),
+                foodPrice: this.calculateFoodPrice(dayData),
+                extraBedPrice: (dayData.extraBedCount || 0) * 10 // Assuming $10 per extra bed
+            }
+        }
+
+        return dayDetail
+    }
+
+    // Calculate date for specific day
+    calculateDayDate(dayNumber) {
+        const startDate = new Date(this.tourInfoForm.getFormData().startDate)
+        const dayDate = new Date(startDate)
+        dayDate.setDate(dayDate.getDate() + (dayNumber - 1))
+        return dayDate.toISOString().split('T')[0]
+    }
+
+    // Get location label
+    getLocationLabel(locationValue) {
+        const locationMap = {
+            'north': 'Miền Bắc',
+            'central-vietnam': 'Miền Trung',
+            'south': 'Miền Nam',
+            'phu-quoc-island': 'Phú Quốc'
+        }
+        return locationMap[locationValue] || locationValue
+    }
+
+    // Get guide language
+    getGuideLanguage(guideValue) {
+        const guideMap = {
+            'english': 'English',
+            'vietnamese': 'Vietnamese',
+            'chinese': 'Chinese',
+            'japanese': 'Japanese',
+            'korean': 'Korean'
+        }
+        return guideMap[guideValue] || 'English'
+    }
+
+    // Get food label
+    getFoodLabel(foodValue) {
+        const foodMap = {
+            'vietnamese': 'Vietnamese - Recommended Dining',
+            'chinese': 'Chinese Cuisine',
+            'western': 'Western Cuisine',
+            'michelin': 'Michelin - Recommended Dining'
+        }
+        return foodMap[foodValue] || 'Vietnamese - Recommended Dining'
+    }
+
+    // Get hotel label
+    getHotelLabel(hotelValue) {
+        const hotelMap = {
+            'lotus-economy': 'Lotus Economy',
+            'lotus-deluxe': 'Lotus Deluxe',
+            'lotus-premium': 'Lotus Premium',
+            'lotus-vip': 'Lotus VIP'
+        }
+        return hotelMap[hotelValue] || 'Lotus Premium'
+    }
+
+    // Get other services
+    getOtherServices(servicesList) {
+        const serviceMap = {
+            'visa': 'Visa',
+            'arrival-fast-track': 'Arrival fast track',
+            'departure-fast-track': 'Departure fast track',
+            'massage': 'Massage',
+            'vietnamese-hair-wash': 'Vietnamese hair wash',
+            'professional-photography': 'Professional photography'
+        }
+
+        return servicesList.map(service => serviceMap[service] || service).join(', ')
+    }
+
+    // Calculate hotel price (basic calculation - adjust as needed)
+    calculateHotelPrice(dayData) {
+        const baseHotelPrices = {
+            'lotus-economy': 50,
+            'lotus-deluxe': 80,
+            'lotus-premium': 120,
+            'lotus-vip': 200
+        }
+        const basePrice = baseHotelPrices[dayData.hotel] || 100
+        return basePrice * (dayData.roomCount || 0)
+    }
+
+    // Calculate food price (basic calculation - adjust as needed) 
+    calculateFoodPrice(dayData) {
+        const baseFoodPrices = {
+            'vietnamese': 25,
+            'chinese': 30,
+            'western': 35,
+            'michelin': 50
+        }
+        return baseFoodPrices[dayData.food] || 25
+    }
+
+    // Get price breakdown
+    getPriceBreakdown() {
+        const dailyPlans = this.dailyPlanForm.dailyPlans
+        const breakdown = {
+            totalVehicle: 0,
+            totalHotel: 0,
+            totalFood: 0,
+            totalExtraBed: 0,
+            totalOtherServices: 0
+        }
+
+        Object.values(dailyPlans).forEach(dayData => {
+            if (dayData.confirmed && !dayData.noService) {
+                breakdown.totalVehicle += dayData.vehicle?.calculatedPrice || 0
+                breakdown.totalHotel += this.calculateHotelPrice(dayData)
+                breakdown.totalFood += this.calculateFoodPrice(dayData)
+                breakdown.totalExtraBed += (dayData.extraBedCount || 0) * 10
+            }
+        })
+
+        return breakdown
+    }
+
+    // Submit the complete booking data
+    async submitBooking() {
+        try {
+            const bookingData = this.getCompleteBookingData()
+
+            console.log('Complete booking data:', bookingData)
+
+            // Here you can send the data to your server
+            // const response = await fetch('/api/bookings', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(bookingData)
+            // })
+
+            // For now, just show the data
+            alert('Booking data ready for submission! Check console for details.')
+
+            return bookingData
+        } catch (error) {
+            console.error('Error submitting booking:', error)
+            alert('Error preparing booking data. Please try again.')
+            return null
+        }
     }
 }
 
@@ -1120,9 +1429,9 @@ class TourInformationForm {
                 totalPax: 0,
                 adults: 0,
                 children: 0,
-                // children1: 0,
-                // children2: 0,
-                // children3: 0
+                children1: 0,
+                children2: 0,
+                children3: 0
             }
         }
 
@@ -1209,11 +1518,25 @@ class TourInformationForm {
                 for (let i = 1; i <= days; i++) {
                     const dayDetail = document.createElement("div")
                     dayDetail.className = "tour-item"
-                    dayDetail.innerHTML = this.repeaterDayDetails(
-                        i,
-                        this.getTotalPaxCount().children,
-                        this.getTotalPaxCount().adults,
-                    )
+                    dayDetail.setAttribute('data-day', i) // Add data-day attribute for easier targeting
+
+                    // Check if we're in customize mode
+                    if (this.isCustomizeMode()) {
+                        // Use day-specific pax data
+                        const dayPaxData = this.getDayPaxCount(i)
+                        dayDetail.innerHTML = this.repeaterDayDetails(
+                            i,
+                            dayPaxData.children,
+                            dayPaxData.adults,
+                        )
+                    } else {
+                        // Use step 1 pax data for all days
+                        dayDetail.innerHTML = this.repeaterDayDetails(
+                            i,
+                            this.getTotalPaxCount().children,
+                            this.getTotalPaxCount().adults,
+                        )
+                    }
                     sidebarDayDetails.appendChild(dayDetail)
                 }
             }
@@ -1223,7 +1546,10 @@ class TourInformationForm {
             sidebarTotalDay.textContent = `${days} days`
         }
         if (sidebarTotalPrice) {
-            sidebarTotalPrice.textContent = "6.000.000 VND"
+            // Don't reset if already has a value from DailyPlanForm
+            if (!sidebarTotalPrice.textContent || sidebarTotalPrice.textContent === "$0") {
+                sidebarTotalPrice.textContent = ""
+            }
         }
 
         if (sidebarGift && giftContent && sidebarCoupon) {
@@ -1243,6 +1569,9 @@ class TourInformationForm {
         if (this.sidebar) {
             this.sidebar.innerHTML = ""
             this.sidebar.appendChild(template)
+
+            // Keep sidebar total visible if there are confirmed days
+            this.preserveSidebarTotalState()
         }
     }
 
@@ -1260,6 +1589,24 @@ class TourInformationForm {
 
     formatDate(date) {
         return date.toLocaleDateString("en-CA")
+    }
+
+    // Preserve sidebar total state after sidebar update
+    preserveSidebarTotalState() {
+        // Check if there are any confirmed days in DailyPlanForm
+        if (this.bookForm.dailyPlanForm) {
+            const hasConfirmedDays = Object.values(this.bookForm.dailyPlanForm.dailyPlans).some(day => day.confirmed)
+
+            if (hasConfirmedDays) {
+                const sidebarTotalDay = document.querySelector("#container__customize .summary-total")
+                if (sidebarTotalDay) {
+                    sidebarTotalDay.style.display = 'block'
+                }
+
+                // Also update the total price
+                this.bookForm.dailyPlanForm.updateSidebarTotalPrice()
+            }
+        }
     }
 
     validateForm() {
@@ -1323,6 +1670,30 @@ class TourInformationForm {
         formErrors.classList.add("show")
     }
 
+    // Update specific day in sidebar (used when pax changes in customize mode)
+    updateSpecificDayInSidebar(dayNumber) {
+        if (!this.isCustomizeMode()) return
+
+        const sidebar = document.querySelector('.sidebar')
+        if (!sidebar) return
+
+        // Find the specific day item
+        const dayItem = sidebar.querySelector(`.tour-item[data-day="${dayNumber}"]`)
+        if (!dayItem) return
+
+        // Get current pax data for this day
+        const dayPaxData = this.getDayPaxCount(dayNumber)
+
+        // Update the content
+        dayItem.innerHTML = this.repeaterDayDetails(
+            dayNumber,
+            dayPaxData.children,
+            dayPaxData.adults,
+        )
+
+        console.log(`Sidebar day ${dayNumber} updated with pax:`, dayPaxData)
+    }
+
     getFormData() {
         return {
             startDate: document.getElementById("startDate").value,
@@ -1356,6 +1727,7 @@ class DailyPlanForm {
         this.serviceManager = new ServiceManager()
         this.priceCalculator = new PriceCalculator(bookingForm)
         this.formStateManager = new FormStateManager(this)
+
 
         // Legacy properties for backward compatibility
         this.regions = this.regionCityManager.regions
@@ -1563,14 +1935,19 @@ class DailyPlanForm {
 
         // Restore vehicle state and update total price after all other restorations
         setTimeout(() => {
+            // Auto-display vehicle data for restored selection
+            if (dayData.itinerary && dayData.vehicleCache) {
+                this.autoDisplayDefaultVehicle(dayNumber)
+            }
+
             // Update total price display
             if (dayData.totalPrice) {
                 this.priceCalculator.updateDayTotalPriceDisplay(dayNumber, dayData.totalPrice, {
                     vehicle: dayData.vehicle?.calculatedPrice || 0,
-                    food: 0, // Will be calculated
-                    hotel: 0, // Will be calculated
+                    food: 0,
+                    hotel: 0,
                     extraBed: dayData.extraBedCount ? dayData.extraBedCount * 10 : 0,
-                    tour: 0 // Tour price included in vehicle
+                    tour: 0
                 })
             }
 
@@ -1581,7 +1958,6 @@ class DailyPlanForm {
         }, 1300) // After all restore delays are done
     }
 
-    // Note: Auto-load cities functionality moved to FormStateManager.restoreDaySelections
 
 
 
@@ -1640,7 +2016,7 @@ class DailyPlanForm {
             const locationSection = dayElement.querySelector('.location-section')
             if (locationSection) {
                 const paxSection = this.createPaxSectionForDay(dayNumber)
-                locationSection.insertAdjacentHTML('afterend', paxSection)
+                locationSection.insertAdjacentHTML('beforebegin', paxSection)
             }
         }
     }
@@ -1649,43 +2025,119 @@ class DailyPlanForm {
     createPaxSectionForDay(dayNumber) {
         return `
             <div class="form-group pax-section-day" id="paxSection-${dayNumber}">
-                <h3>Passenger Information - Day ${dayNumber}</h3>
+                <p class="pax-section-day-title">Pax quantity <strong>*</strong> </p>
                 <div class="pax-controls-day">
-                    <div class="pax-item">
-                        <label>Adults (13+ years)</label>
-                        <div class="quantity-control">
-                            <button type="button" class="qty-btn minus" data-target="adults-${dayNumber}">-</button>
-                            <span class="quantity-number" data-target="adults-${dayNumber}">2</span>
-                            <button type="button" class="qty-btn plus" data-target="adults-${dayNumber}">+</button>
+                    <div class="age-group">
+                        <div class="age-label">
+                            <span>Adults (13+ years)</span>
                         </div>
-                        <input type="hidden" id="adults-${dayNumber}" value="2">
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" data-target="adults-${dayNumber}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                    viewBox="0 0 18 18" fill="none">
+                                    <path
+                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                        fill="white" />
+                                </svg></button>
+                            <input type="number" id="adults-${dayNumber}" name="adults-${dayNumber}" value="0" min="0"
+                                readonly>
+                            <p class="quantity-number" data-target="adults-${dayNumber}">0</p>
+                            <button type="button" class="qty-btn plus" data-target="adults-${dayNumber}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                    viewBox="0 0 18 18" fill="none">
+                                    <path
+                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                        fill="white" />
+                                    <path
+                                        d="M9.00249 13.909C8.7043 13.909 8.45703 13.6617 8.45703 13.3635V4.63627C8.45703 4.33809 8.7043 4.09082 9.00249 4.09082C9.30067 4.09082 9.54794 4.33809 9.54794 4.63627V13.3635C9.54794 13.6617 9.30067 13.909 9.00249 13.909Z"
+                                        fill="white" />
+                                </svg></button>
+                        </div>
                     </div>
-                    <div class="pax-item">
-                        <label>Children (0-2 years) - Free</label>
-                        <div class="quantity-control">
-                            <button type="button" class="qty-btn minus" data-target="children1-${dayNumber}">-</button>
-                            <span class="quantity-number" data-target="children1-${dayNumber}">0</span>
-                            <button type="button" class="qty-btn plus" data-target="children1-${dayNumber}">+</button>
+
+                    <div class="age-group">
+                        <div class="age-label">
+                            <span>Children (0-2 years) - Free</span>
                         </div>
-                        <input type="hidden" id="children1-${dayNumber}" value="0">
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" data-target="children1-${dayNumber}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                    viewBox="0 0 18 18" fill="none">
+                                    <path
+                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                        fill="white" />
+                                </svg></button>
+                            <input type="number" id="children1-${dayNumber}" name="children1-${dayNumber}" value="0" min="0"
+                                readonly>
+                            <p class="quantity-number" data-target="children1-${dayNumber}">0</p>
+                            <button type="button" class="qty-btn plus" data-target="children1-${dayNumber}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                    viewBox="0 0 18 18" fill="none">
+                                    <path
+                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                        fill="white" />
+                                    <path
+                                        d="M9.00249 13.909C8.7043 13.909 8.45703 13.6617 8.45703 13.3635V4.63627C8.45703 4.33809 8.7043 4.09082 9.00249 4.09082C9.30067 4.09082 9.54794 4.33809 9.54794 4.63627V13.3635C9.54794 13.6617 9.30067 13.909 9.00249 13.909Z"
+                                        fill="white" />
+                                </svg></button>
+                        </div>
                     </div>
-                    <div class="pax-item">
-                        <label>Children (3-6 years) - 60%</label>
-                        <div class="quantity-control">
-                            <button type="button" class="qty-btn minus" data-target="children2-${dayNumber}">-</button>
-                            <span class="quantity-number" data-target="children2-${dayNumber}">0</span>
-                            <button type="button" class="qty-btn plus" data-target="children2-${dayNumber}">+</button>
+
+
+                    <div class="age-group">
+                        <div class="age-label">
+                            <span>Children (3-6 years) - 60%</span>
                         </div>
-                        <input type="hidden" id="children2-${dayNumber}" value="0">
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" data-target="children2-${dayNumber}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                    viewBox="0 0 18 18" fill="none">
+                                    <path
+                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                        fill="white" />
+                                </svg></button>
+                            <input type="number" id="children2-${dayNumber}" name="children2-${dayNumber}" value="0" min="0"
+                                readonly>
+                            <p class="quantity-number" data-target="children2-${dayNumber}">0</p>
+                            <button type="button" class="qty-btn plus" data-target="children2-${dayNumber}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                    viewBox="0 0 18 18" fill="none">
+                                    <path
+                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                        fill="white" />
+                                    <path
+                                        d="M9.00249 13.909C8.7043 13.909 8.45703 13.6617 8.45703 13.3635V4.63627C8.45703 4.33809 8.7043 4.09082 9.00249 4.09082C9.30067 4.09082 9.54794 4.33809 9.54794 4.63627V13.3635C9.54794 13.6617 9.30067 13.909 9.00249 13.909Z"
+                                        fill="white" />
+                                </svg></button>
+                        </div>
                     </div>
-                    <div class="pax-item">
-                        <label>Children (7-12 years) - 80%</label>
-                        <div class="quantity-control">
-                            <button type="button" class="qty-btn minus" data-target="children3-${dayNumber}">-</button>
-                            <span class="quantity-number" data-target="children3-${dayNumber}">0</span>
-                            <button type="button" class="qty-btn plus" data-target="children3-${dayNumber}">+</button>
+
+                    <div class="age-group">
+                        <div class="age-label">
+                            <span>Children (7-9 years) - 80%</span>
                         </div>
-                        <input type="hidden" id="children3-${dayNumber}" value="0">
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" data-target="children3-${dayNumber}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                    viewBox="0 0 18 18" fill="none">
+                                    <path
+                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                        fill="white" />
+                                </svg></button>
+                            <input type="number" id="children3-${dayNumber}" name="children3-${dayNumber}" value="0" min="0"
+                                readonly>
+                            <p class="quantity-number" data-target="children3-${dayNumber}">0</p>
+                            <button type="button" class="qty-btn plus" data-target="children3-${dayNumber}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                    viewBox="0 0 18 18" fill="none">
+                                    <path
+                                        d="M13.3626 9.5455H4.6353C4.33712 9.5455 4.08984 9.29823 4.08984 9.00004C4.08984 8.70186 4.33712 8.45459 4.6353 8.45459H13.3626C13.6608 8.45459 13.908 8.70186 13.908 9.00004C13.908 9.29823 13.6608 9.5455 13.3626 9.5455Z"
+                                        fill="white" />
+                                    <path
+                                        d="M9.00249 13.909C8.7043 13.909 8.45703 13.6617 8.45703 13.3635V4.63627C8.45703 4.33809 8.7043 4.09082 9.00249 4.09082C9.30067 4.09082 9.54794 4.33809 9.54794 4.63627V13.3635C9.54794 13.6617 9.30067 13.909 9.00249 13.909Z"
+                                        fill="white" />
+                                </svg></button>
+                        </div>
                     </div>
                 </div>
                 <div class="total-pax-day">
@@ -2049,6 +2501,7 @@ class DailyPlanForm {
                 e.preventDefault() // Prevent form submission
                 e.stopPropagation() // Stop event bubbling
                 this.confirmDay(dayNumber)
+
             })
         }
 
@@ -2111,30 +2564,36 @@ class DailyPlanForm {
         if (totalPaxElement) {
             totalPaxElement.textContent = `${dayPaxData.totalPax} pax`
         }
+
+        // Update sidebar for this specific day if in customize mode
+        if (this.bookingForm.tourInfoForm.isCustomizeMode()) {
+            this.bookingForm.tourInfoForm.updateSpecificDayInSidebar(dayNumber)
+        }
+
         return dayPaxData.totalPax
 
         // Initialize dropdowns after element is appended to DOM
-        setTimeout(() => {
-            // Set default region to north
-            const firstRadio = document.querySelector(`input[name="location-${dayNumber}"]`)
-            if (firstRadio) {
-                firstRadio.checked = true
-                this.updateCityOptions(dayNumber, firstRadio.value)
-            }
-            this.initTourTypeSearch(dayNumber)
-            this.initGuideDropdown(dayNumber)
+        // setTimeout(() => {
+        //     // Set default region to north
+        //     const firstRadio = document.querySelector(`input[name="location-${dayNumber}"]`)
+        //     if (firstRadio) {
+        //         firstRadio.checked = true
+        //         this.updateCityOptions(dayNumber, firstRadio.value)
+        //     }
+        //     this.initTourTypeSearch(dayNumber)
+        //     this.initGuideDropdown(dayNumber)
 
-            // Set default itinerary to standard and load vehicle
-            const standardRadio = document.querySelector(`input[name="itinerary-${dayNumber}"][value="standard"]`)
-            if (standardRadio) {
-                standardRadio.checked = true
-                // Load default vehicle (standard) on initialization
-                this.handleCheckVehicle(dayNumber, 'standard')
-            }
+        //     // Set default itinerary to standard and load vehicle
+        //     const standardRadio = document.querySelector(`input[name="itinerary-${dayNumber}"][value="standard"]`)
+        //     if (standardRadio) {
+        //         standardRadio.checked = true
+        //         // Load default vehicle (standard) on initialization
+        //         this.handleCheckVehicle(dayNumber, 'standard')
+        //     }
 
-            // Note: Removed default selections to allow progressive disclosure
-            // Sections will be shown only after user completes basic selections
-        }, 50)
+        //     // Note: Removed default selections to allow progressive disclosure
+        //     // Sections will be shown only after user completes basic selections
+        // }, 50)
     }
 
     toggleNoService(dayNumber, isNoService) {
@@ -2162,6 +2621,19 @@ class DailyPlanForm {
 
             // Update sidebar to show free day
             this.updateSidebarForFreeDay(dayNumber)
+
+            // Show submit button and summary-total when no service is selected
+            const submitBtn = document.querySelector("#container__customize #submitForm")
+            const summaryTotal = document.querySelector('.summary-total')
+
+            if (submitBtn) {
+                submitBtn.style.display = 'block'
+            }
+
+            if (summaryTotal) {
+                summaryTotal.style.display = 'block'
+                summaryTotal.classList.add('active')
+            }
         } else {
             dayContent.style.display = "block"
             dayCollapsed.style.display = "none"
@@ -2170,6 +2642,22 @@ class DailyPlanForm {
             if (this.dailyPlans[dayNumber]) {
                 delete this.dailyPlans[dayNumber].noService
                 delete this.dailyPlans[dayNumber].confirmed
+            }
+
+            // Check if should hide submit button and summary-total (only hide if no confirmed days)
+            const hasConfirmedDays = Object.values(this.dailyPlans).some(dayData => dayData.confirmed)
+            if (!hasConfirmedDays) {
+                const submitBtn = document.querySelector("#container__customize #submitForm")
+                const summaryTotal = document.querySelector('.summary-total')
+
+                if (submitBtn) {
+                    submitBtn.style.display = 'none'
+                }
+
+                if (summaryTotal) {
+                    summaryTotal.style.display = 'none'
+                    summaryTotal.classList.remove('active')
+                }
             }
         }
 
@@ -2504,7 +2992,7 @@ class DailyPlanForm {
                     image: tour.featured_image || tour.image || "/placeholder.svg?height=150&width=200",
                     type: "Guided Tour",
                     services: tour.services || ["Professional guide", "Transportation", "Entrance fees"],
-                    price: tour.price || Math.floor(Math.random() * 400) + 200,
+                    // price: tour.price || Math.floor(Math.random() * 400) + 200,
                     duration: tour.duration || "Full day",
                     rating: tour.rating || 4.5,
                     link: tour.link || tour.permalink || '#'
@@ -2567,15 +3055,10 @@ class DailyPlanForm {
     async fetchVehicle(pax, type, tourId) {
         // Check if tour ID is provided
         if (!tourId) {
-            console.warn(`No tour ID provided, cannot fetch vehicle`)
             return null
         }
-
-        console.log(`Fetching vehicle: pax=${pax}, type=${type}, tourId=${tourId}`)
-
         // Delegate to VehicleManager
         const vehicleData = await this.vehicleManager.fetchVehicle(pax, type, tourId)
-        console.log(`Vehicle data received:`, vehicleData)
 
         return vehicleData
     }
@@ -2666,12 +3149,7 @@ class DailyPlanForm {
                         calculatedPrice: calculatedPrice
                     }
                 }
-
-                console.log(`Day ${dayNumber} vehicle updated from API:`, vehicleType, `${totalPax} pax`)
-            } else {
-                console.log(`Day ${dayNumber} vehicle fetch skipped - no tour selected`)
             }
-
         } catch (error) {
             console.error('Error handling vehicle selection:', error)
         } finally {
@@ -2974,8 +3452,6 @@ class DailyPlanForm {
                 this.fetchVehicle(totalPax, 'vip', tourId)
             ])
 
-            console.log(`Day ${dayNumber} API results:`, { standardData, vipData })
-
             // Check if we got valid data
             if (!standardData && !vipData) {
                 console.error(`Day ${dayNumber}: Both vehicle API calls failed`)
@@ -3001,7 +3477,8 @@ class DailyPlanForm {
                 paxData: paxData
             }
 
-            console.log(`Day ${dayNumber} vehicle cache loaded:`, this.dailyPlans[dayNumber].vehicleCache)
+            // Auto-display vehicle data for the first checked/default option
+            this.autoDisplayDefaultVehicle(dayNumber)
 
         } catch (error) {
             console.error(`Error preloading vehicle data for day ${dayNumber}:`, error)
@@ -3027,13 +3504,6 @@ class DailyPlanForm {
 
         const basePriceFromAPI = parseFloat(vehicleData.price) || 0
 
-        console.log('calculateVehiclePrice:', {
-            vehicleData,
-            basePriceFromAPI,
-            totalPax,
-            paxData
-        })
-
         return this.calculatePriceByAge(
             basePriceFromAPI,
             totalPax,
@@ -3044,11 +3514,43 @@ class DailyPlanForm {
         )
     }
 
+    // Auto-display vehicle data for the first checked/default vehicle option
+    autoDisplayDefaultVehicle(dayNumber) {
+        // Find the first checked itinerary radio button or use stored selection
+        let defaultVehicleType = 'standard'
+        const checkedItinerary = document.querySelector(`input[name="itinerary-${dayNumber}"]:checked`)
+
+        if (checkedItinerary) {
+            defaultVehicleType = checkedItinerary.value
+        } else if (this.dailyPlans[dayNumber]?.itinerary) {
+            // Use stored itinerary selection from confirmed day
+            defaultVehicleType = this.dailyPlans[dayNumber].itinerary
+            // Make sure radio is checked
+            const storedRadio = document.querySelector(`input[name="itinerary-${dayNumber}"][value="${defaultVehicleType}"]`)
+            if (storedRadio) {
+                storedRadio.checked = true
+            }
+        } else {
+            // Auto-check the first option (usually 'standard')
+            const firstItineraryRadio = document.querySelector(`input[name="itinerary-${dayNumber}"][value="standard"]`)
+            if (firstItineraryRadio) {
+                firstItineraryRadio.checked = true
+                // Store itinerary selection
+                this.updateItinerarySelection(dayNumber, 'standard')
+            }
+        }
+
+        // Display vehicle data for the default/checked option
+        if (this.dailyPlans[dayNumber]?.vehicleCache?.[defaultVehicleType]) {
+            console.log(`Auto-displaying ${defaultVehicleType} vehicle data for day ${dayNumber}`)
+            this.handleCheckVehicle(dayNumber, defaultVehicleType)
+        }
+    }
+
     // Clear vehicle cache for a specific day (useful when pax count changes)
     clearVehicleCache(dayNumber) {
         if (this.dailyPlans[dayNumber] && this.dailyPlans[dayNumber].vehicleCache) {
             delete this.dailyPlans[dayNumber].vehicleCache
-            console.log(`Day ${dayNumber} vehicle cache cleared`)
         }
     }
 
@@ -3140,7 +3642,6 @@ class DailyPlanForm {
     // Load hotels for a specific day
     async loadHotelsForDay(dayNumber, postId = 467) {
         try {
-            console.log(`Loading hotels for day ${dayNumber}`)
             const hotels = await this.hotelManager.fetchHotels(postId)
 
             // Get current room count
@@ -3159,10 +3660,8 @@ class DailyPlanForm {
                 }
                 this.dailyPlans[dayNumber].hotel = hotels[0].value
                 this.updateHotelSelection(dayNumber, hotels[0].value)
-                console.log(`Default hotel set for day ${dayNumber}: ${hotels[0].value}`)
             }
 
-            console.log(`Hotels loaded for day ${dayNumber}:`, hotels)
             return hotels
         } catch (error) {
             console.error(`Error loading hotels for day ${dayNumber}:`, error)
@@ -3226,12 +3725,13 @@ class DailyPlanForm {
         // Calculate day total price
         this.calculateDayTotalPrice(dayNumber)
 
-        console.log(`Day ${dayNumber} room count updated: ${currentCount} → ${newCount}`)
     }
 
     confirmDay(dayNumber) {
         // Check if it's a no service day
         const noServiceCheckbox = document.getElementById(`noService-${dayNumber}`)
+        const sidebarTotalDay = document.querySelector("#container__customize .summary-total")
+        const submitBtn = document.querySelector("#container__customize #submitForm")
         if (noServiceCheckbox && noServiceCheckbox.checked) {
             // Already handled in toggleNoService
             return
@@ -3240,6 +3740,15 @@ class DailyPlanForm {
         // Validate day data
         if (!this.validateDay(dayNumber)) {
             return
+        }
+
+        if (sidebarTotalDay) {
+            sidebarTotalDay.style.display = 'block'
+            sidebarTotalDay.classList.add('active')
+        }
+
+        if (submitBtn) {
+            submitBtn.style.display = 'block'
         }
 
         // Collect day data
@@ -3371,27 +3880,64 @@ class DailyPlanForm {
     collapseDay(dayNumber, dayData) {
         const dayContent = document.getElementById(`dayContent-${dayNumber}`)
         const dayCollapsed = document.getElementById(`dayCollapsed-${dayNumber}`)
+        const dayPlan = document.getElementById(`day-${dayNumber}`)
 
         dayContent.style.display = "none"
         dayCollapsed.style.display = "block"
+        dayPlan.classList.add('collapsed')
+        // Get the day date for display
+        const tourInfo = this.bookingForm.tourInfoForm.getFormData()
+        const startDate = new Date(tourInfo.startDate)
+        startDate.setDate(startDate.getDate() + (dayNumber - 1))
+        const formattedDate = startDate.toISOString().split('T')[0].replace(/-/g, '/')
 
-        // Update collapsed content with more details
+        // Update collapsed content to match the design
         const collapsedContent = dayCollapsed.querySelector(".collapsed-content")
         collapsedContent.innerHTML = `
-            <h4>Day ${dayNumber}: ${dayData.selectedTourData.name || 'Tour Selected'}</h4>
-            <div class="collapsed-status">✓ Confirmed</div>
-            <div class="collapsed-details">
-                <p><strong>Region:</strong> ${this.regions.find(r => r.value === dayData.location)?.label || dayData.location}</p>
-                ${dayData.location !== 'phu-quoc-island' ? `<p><strong>City:</strong> ${dayData.city}</p>` : ''}
-                <p><strong>Tour Type:</strong> ${dayData.tourType}</p>
-                <p><strong>Rooms:</strong> ${dayData.roomCount}</p>
-                ${dayData.selectedTourData.price ? `<p><strong>Price:</strong> $${dayData.selectedTourData.price}</p>` : ''}
+            <div class="collapsed-form-content">
+                <div class="overlay-collapsed"></div>
+                <div class="form-section">
+                    <h4>Select location</h4>
+                    <div class="location-options-collapsed">
+                        <label class="location-option  ${dayData.location === 'north' ? 'selected' : ''}">
+                            <input type="radio" name="location-collapsed-${dayNumber}" value="north" ${dayData.location === 'north' ? 'checked' : ''} >
+                            <span>Mien Bac</span>
+                        </label>
+                        <label class="location-option ${dayData.location === 'central-vietnam' ? 'selected' : ''}">
+                            <input type="radio" name="location-collapsed-${dayNumber}" value="central-vietnam" ${dayData.location === 'central-vietnam' ? 'checked' : ''}>
+                            <span>Mien Trung</span>
+                        </label>
+                        <label class="location-option ${dayData.location === 'south' ? 'selected' : ''}">
+                            <input type="radio" name="location-collapsed-${dayNumber}" value="south" ${dayData.location === 'south' ? 'checked' : ''}>
+                            <span>Mien Nam</span>
+                        </label>
+                        <label class="location-option ${dayData.location === 'phu-quoc-island' ? 'selected' : ''}">
+                            <input type="radio" name="location-collapsed-${dayNumber}" value="phu-quoc-island" ${dayData.location === 'phu-quoc-island' ? 'checked' : ''}>
+                            <span>Phu Quoc</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-fields-collapsed">
+                    <div class="form-group">
+                        <label class="required">City</label>
+                    </div>
+                    <div class="form-group">
+                        <label class="required">Type of tour</label>
+                    </div>
+                </div>
+                <button type="button" class="confirm-day-btn" data-day="${dayNumber}">
+                    See Detail
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="14" viewBox="0 0 17 14" fill="none">
+                        <path d="M2.08984 6.99658H15.2774" stroke="white" stroke-width="1.49167" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M9.88281 1.60156L15.2778 6.99637L9.88281 12.3912" stroke="white" stroke-width="1.49167" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
             </div>
-            <button type="button" class="see-detail-btn" data-day="${dayNumber}">See Details</button>
         `
 
         // Add event listener for the dynamically created See Details button
-        const seeDetailBtn = collapsedContent.querySelector(".see-detail-btn")
+        const seeDetailBtn = collapsedContent.querySelector(".confirm-day-btn")
         if (seeDetailBtn) {
             seeDetailBtn.addEventListener("click", (e) => {
                 e.preventDefault() // Prevent form submission
@@ -3399,12 +3945,21 @@ class DailyPlanForm {
                 this.expandDay(dayNumber)
             })
         }
+
+        // Add event listener for no service checkbox
+        const noServiceCheckbox = collapsedContent.querySelector(`#noService-${dayNumber}-collapsed`)
+        if (noServiceCheckbox) {
+            noServiceCheckbox.addEventListener("change", (e) => {
+                this.toggleNoService(dayNumber, e.target.checked)
+            })
+        }
     }
 
     expandDay(dayNumber) {
         const dayContent = document.getElementById(`dayContent-${dayNumber}`)
         const dayCollapsed = document.getElementById(`dayCollapsed-${dayNumber}`)
-
+        const dayPlan = document.getElementById(`day-${dayNumber}`)
+        dayPlan.classList.remove('collapsed')
         dayContent.style.display = "block"
         dayCollapsed.style.display = "none"
 
@@ -3452,16 +4007,31 @@ class DailyPlanForm {
     }
 
     updateSidebarForDay(dayNumber, dayData) {
-        // Get passenger info from step 1
-        const tourInfo = this.bookingForm.tourInfoForm.getFormData()
-
-        // Update the tour summary in sidebar
         const tourSummary = document.querySelector(".tour-summary")
-        if (tourSummary) {
-            // Find the day item and update it
-            const dayItems = tourSummary.querySelectorAll(".tour-item")
-            if (dayItems[dayNumber - 1]) {
-                const dayItem = dayItems[dayNumber - 1]
+        if (!tourSummary) return
+
+        // Find the day item and update it
+        const dayItems = tourSummary.querySelectorAll(".tour-item")
+        if (dayItems[dayNumber - 1]) {
+            const dayItem = dayItems[dayNumber - 1]
+
+            // Check if we're in customize mode
+            if (this.bookingForm.tourInfoForm.isCustomizeMode()) {
+                // Use day-specific pax data
+                const dayPaxData = this.bookingForm.tourInfoForm.getDayPaxCount(dayNumber)
+                dayItem.innerHTML = `
+                    <div class="tour-item-title">
+                        <p class="label">Day ${dayNumber}: <strong>${dayData.selectedTourData.name || 'Selected Tour'}</strong></p>
+                        <p class="detail">Detail</p>
+                    </div>
+                    <div class="tour-members-day">
+                        <p>Adults: <strong>X${dayPaxData.adults}</strong></p>
+                        <p>Children: <strong>X${dayPaxData.children}</strong></p>
+                    </div>
+                `
+            } else {
+                // Use step 1 pax data for all days
+                const tourInfo = this.bookingForm.tourInfoForm.getFormData()
                 dayItem.innerHTML = `
                     <div class="tour-item-title">
                         <p class="label">Day ${dayNumber}: <strong>${dayData.selectedTourData.name || 'Selected Tour'}</strong></p>
@@ -3501,6 +4071,9 @@ class DailyPlanForm {
             }
         }
     }
+
+    // Update sidebar for specific day (used in customize mode)
+
 
     // Guide dropdown methods
     initGuideDropdown(dayNumber) {
@@ -3616,7 +4189,6 @@ class DailyPlanForm {
             this.handleCheckVehicle(dayNumber, value)
         }
 
-        console.log(`Day ${dayNumber} itinerary updated:`, value)
     }
 
     // Update itinerary description without vehicle data
@@ -3632,22 +4204,6 @@ class DailyPlanForm {
                 // description.textContent = `${vehicleTypeLabel} car for ${tourInfo.totalPax} pax (Select tour to see price)`
             }
         })
-
-        // Clear vehicle section until tour is selected
-        // const vehicleTitle = document.querySelector(`#day-${dayNumber} .vehicle-header .section-title`)
-        // if (vehicleTitle) {
-        //     vehicleTitle.textContent = 'Select tour to see vehicle options'
-        // }
-
-        // const vehicleSubtitle = document.querySelector(`#day-${dayNumber} .vehicle-subtitle`)
-        // if (vehicleSubtitle) {
-        //     vehicleSubtitle.innerHTML = 'Please select a tour first'
-        // }
-
-        // const vehicleImages = document.querySelector(`#day-${dayNumber} .vehicle-images`)
-        // if (vehicleImages) {
-        //     vehicleImages.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">Select a tour to see vehicle options</div>'
-        // }
 
         const totalPriceElement = document.querySelector(`#day-${dayNumber} .total-price-day`)
         if (totalPriceElement) {
@@ -3758,8 +4314,6 @@ class DailyPlanForm {
 
         // Calculate day total price
         this.calculateDayTotalPrice(dayNumber)
-
-        console.log(`Day ${dayNumber} extra bed updated:`, value)
     }
 
     // Extra bed count update method
@@ -3800,7 +4354,6 @@ class DailyPlanForm {
         // Calculate day total price
         this.calculateDayTotalPrice(dayNumber)
 
-        console.log(`Day ${dayNumber} extra bed count updated:`, currentCount)
     }
 
     // Calculate total price for a specific day using PriceCalculator
@@ -3811,17 +4364,29 @@ class DailyPlanForm {
         if (this.dailyPlans[dayNumber]) {
             this.dailyPlans[dayNumber].totalPrice = totalPrice
         }
-
         // Calculate grand total for all days
         this.calculateGrandTotal()
 
-        console.log(`Day ${dayNumber} total price: $${totalPrice.toFixed(2)}`)
     }
 
     // Calculate grand total for all confirmed days using PriceCalculator
     calculateGrandTotal() {
         this.grandTotal = this.priceCalculator.calculateGrandTotal(this.dailyPlans)
         console.log(`Grand total for all days: $${this.grandTotal.toFixed(2)}`)
+
+        // Update sidebar total price
+        this.updateSidebarTotalPrice()
+    }
+
+    // Update sidebar total price
+    updateSidebarTotalPrice() {
+        const totalPriceSidebar = document.querySelector("#container__customize .total-row .total-price") ||
+            document.querySelector(".total-price")
+
+        if (totalPriceSidebar) {
+            const grandTotal = this.priceCalculator.calculateGrandTotal(this.dailyPlans)
+            totalPriceSidebar.textContent = `$${grandTotal.toFixed(2)}`
+        }
     }
 
 

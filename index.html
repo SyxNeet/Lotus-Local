@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multi-Step Tour Booking Form</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="updateStyles.css">
     <!-- Flatpickr CSS for calendar -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
@@ -88,10 +89,11 @@
             </div>
         </div>
         <div class="container__customize">
-            <div class="form-container">
-                <!-- Main Form Container -->
-                <div class="form-content">
-                    <form id="tourForm" class="tour-form" novalidate>
+            <form id="tourForm" class="tour-form" action="#" method="post" novalidate>
+                <div class="form-container">
+                    <!-- Main Form Container -->
+                    <div class="form-content">
+
                         <!-- Step 1: Tour Information -->
                         <div class="step-content active" id="step1">
 
@@ -777,7 +779,178 @@
                                 <h2>Contact Information</h2>
                             </div>
                             <div class="contact-content">
-                                <p>Contact information form will be here...</p>
+                                <div class="bookthistour__form-contact">
+                                    <p class="bookthistour__form-contact-title">
+                                        <?= pll__('your-contact'); ?>
+                                    </p>
+                                    <div class="bookthistour__form-wrapper">
+                                        <div class="bookthistour__form-item">
+                                            <label for="name">
+                                                <?= pll__('yourname'); ?> <sup>*</sup>
+                                            </label>
+                                            <input type="text" id="name" placeholder="Xiao Chao Meng" />
+                                        </div>
+                                        <div class="bookthistour__form-item">
+                                            <label for="email">
+                                                <?= pll__('youremail'); ?> <sup>*</sup>
+                                            </label>
+                                            <input type="text" id="email" placeholder="xiaochaomeng@gmail.com" />
+                                        </div>
+                                    </div>
+                                    <div class="bookthistour__form-item">
+                                        <label for="phone">
+                                            <?= pll__('mostcontact'); ?> <sup>*</sup>
+                                        </label>
+                                        <div class="bookthistour__form-item-phone">
+                                            <div class="bookthistour__form-select-phone itemselect">
+                                                <p class="bookthistour__form_titlelabelphone">
+                                                    <?= pll__('phonenumber'); ?>
+                                                </p>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17"
+                                                    viewBox="0 0 16 17" fill="none">
+                                                    <path
+                                                        d="M7.99904 11.6999C7.53237 11.6999 7.0657 11.5199 6.71237 11.1666L2.3657 6.81993C2.17237 6.62659 2.17237 6.3066 2.3657 6.11326C2.55904 5.91993 2.87904 5.91993 3.07237 6.11326L7.41904 10.4599C7.73904 10.7799 8.25904 10.7799 8.57904 10.4599L12.9257 6.11326C13.119 5.91993 13.439 5.91993 13.6324 6.11326C13.8257 6.3066 13.8257 6.62659 13.6324 6.81993L9.2857 11.1666C8.93237 11.5199 8.4657 11.6999 7.99904 11.6999Z"
+                                                        fill="#1A1A1A" fill-opacity="0.6" />
+                                                </svg>
+                                                <div class="bookthistour__form-item-phone_editmb">
+                                                    Edit
+                                                </div>
+                                                <div class="itemselect__content">
+                                                    <div class="itemselect__content_heading">
+                                                        <p>
+                                                            Other contact method
+                                                        </p>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                            viewBox="0 0 24 24" fill="none">
+                                                            <path d="M5 5L18.9991 18.9991" stroke="#292D32"
+                                                                stroke-width="1.5" stroke-linecap="round"
+                                                                stroke-linejoin="round" />
+                                                            <path d="M5.00094 18.9991L19 5" stroke="#292D32"
+                                                                stroke-width="1.5" stroke-linecap="round"
+                                                                stroke-linejoin="round" />
+                                                        </svg>
+                                                    </div>
+                                                    <div data-placeholder='(+84) 135 456 789'
+                                                        class="itemselect__content_item active">
+                                                        <div class="radio-box">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="18"
+                                                                height="19" viewBox="0 0 18 19" fill="none">
+                                                                <circle class="circle_border" cx="9" cy="9.5" r="8.1"
+                                                                    stroke="#158E5C" stroke-width="1.8" />
+                                                                <circle class="circle_center" cx="8.99961" cy="9.5001"
+                                                                    r="5.4" fill="#158E5C" />
+                                                            </svg>
+                                                        </div>
+                                                        <p class="bookthistour__option-title">
+                                                            <?= pll__('phonenumber'); ?>
+                                                        </p>
+                                                    </div>
+                                                    <div data-placeholder='<?= pll__(' phline') ?>'
+                                                        class="itemselect__content_item">
+                                                        <div class="radio-box">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="18"
+                                                                height="19" viewBox="0 0 18 19" fill="none">
+                                                                <circle class="circle_border" cx="9" cy="9.5" r="8.1"
+                                                                    stroke="#158E5C" stroke-width="1.8" />
+                                                                <circle class="circle_center" cx="8.99961" cy="9.5001"
+                                                                    r="5.4" fill="#158E5C" />
+                                                            </svg>
+                                                        </div>
+                                                        <p class="bookthistour__option-title">
+                                                            Line
+                                                        </p>
+                                                    </div>
+                                                    <div data-placeholder='<?= pll__(' phwhatsapp') ?>'
+                                                        class="itemselect__content_item">
+                                                        <div class="radio-box">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="18"
+                                                                height="19" viewBox="0 0 18 19" fill="none">
+                                                                <circle class="circle_border" cx="9" cy="9.5" r="8.1"
+                                                                    stroke="#158E5C" stroke-width="1.8" />
+                                                                <circle class="circle_center" cx="8.99961" cy="9.5001"
+                                                                    r="5.4" fill="#158E5C" />
+                                                            </svg>
+                                                        </div>
+                                                        <p class="bookthistour__option-title">
+                                                            Whatsapp
+                                                        </p>
+                                                    </div>
+                                                    <div data-placeholder='<?= pll__(' phwechat') ?>'
+                                                        class="itemselect__content_item">
+                                                        <div class="radio-box">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="18"
+                                                                height="19" viewBox="0 0 18 19" fill="none">
+                                                                <circle class="circle_border" cx="9" cy="9.5" r="8.1"
+                                                                    stroke="#158E5C" stroke-width="1.8" />
+                                                                <circle class="circle_center" cx="8.99961" cy="9.5001"
+                                                                    r="5.4" fill="#158E5C" />
+                                                            </svg>
+                                                        </div>
+                                                        <p class="bookthistour__option-title">
+                                                            Wechat
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <input type="text" id="phone" placeholder="(+84) 135 456 789" />
+                                            <?php echo wp_get_attachment_image(569, 'full', false, array( 'class' => 'formphone_img__flag')) ?>
+                                            <div class="itemselect__content bookthistour__phone_popup">
+                                                <div class="itemselect__content-header">
+                                                    <p>Phone’s countries</p>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24" fill="none">
+                                                        <path d="M5 5L18.9991 18.9991" stroke="#292D32"
+                                                            stroke-width="1.5" stroke-linecap="round"
+                                                            stroke-linejoin="round"></path>
+                                                        <path d="M5.00094 18.9991L19 5" stroke="#292D32"
+                                                            stroke-width="1.5" stroke-linecap="round"
+                                                            stroke-linejoin="round"></path>
+                                                    </svg>
+                                                </div>
+                                                <div class="search-box">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21"
+                                                        viewBox="0 0 20 21" fill="none">
+                                                        <path
+                                                            d="M9.58366 17.9998C13.9559 17.9998 17.5003 14.4554 17.5003 10.0832C17.5003 5.71092 13.9559 2.1665 9.58366 2.1665C5.2114 2.1665 1.66699 5.71092 1.66699 10.0832C1.66699 14.4554 5.2114 17.9998 9.58366 17.9998Z"
+                                                            stroke="#292D32" stroke-opacity="0.25" stroke-width="1.25"
+                                                            stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <path d="M18.3337 18.8332L16.667 17.1665" stroke="#292D32"
+                                                            stroke-opacity="0.25" stroke-width="1.25"
+                                                            stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    </svg>
+                                                    <input type="text"
+                                                        placeholder="Enter the Phone’s countries you want"
+                                                        class="tourguide-search">
+                                                </div>
+                                                <div class="itemselect__content_list bookthistour__tourguide_popup">
+                                                    <?php  
+                                	$data = file_get_contents(get_template_directory() . '/assets/data/phone-word.json');
+                                									 $countries = json_decode($data, true);
+                                									 foreach ($countries as $country) { ?>
+                                                    <div code-phone="(<?= $country['idd']['root'] ?>) 135456789"
+                                                        class="itemselect__content_item">
+                                                        <p>
+                                                            <?= $country['name']['common'] ?> (
+                                                            <?= $country['idd']['root'] ?>
+                                                            <?php foreach ($country['idd']['suffixes'] as $itemNum) {
+                                										 echo $itemNum;
+                                									 } ?>)
+                                                        </p>
+                                                        <img src="<?= $country['flags']['png'] ?>" />
+                                                    </div>
+                                                    <?php } ?>
+                                                </div>
+                                                <div class="no-results-message">
+                                                    No results found
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bookthistour__form-item mt">
+                                        <label for="message">Other requests ( If any )</label>
+                                        <textarea id="message" placeholder="Message"></textarea>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -790,110 +963,111 @@
                                 <p>Payment form will be here...</p>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
 
-                <!-- Sidebar -->
-                <div class="sidebar active">
-                    <p class="sidebar-header">Subtotal customize tour
-                        <svg class="close-sidebar" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none">
-                            <path d="M5 5L18.9991 18.9991" stroke="#292D32" stroke-width="1.5" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                            <path d="M5.00094 18.9991L19 5" stroke="#292D32" stroke-width="1.5" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </p>
-                    <div class="sidebar-content">
-                        <div class="date-summary summary-item">
-                            <div class="summary-row">
-                                <span class="total-day">Number of days:</span>
-                                <span id="sidebarDays">--</span>
-                            </div>
-                            <div class="summary-date">
-                                <div class="summary-row">
-                                    <span class="title-date">Start date:</span>
-                                    <span id="sidebarStartDate">--</span>
-                                </div>
-                                <div class="line"></div>
-                                <div class="summary-row">
-                                    <span class="title-date">End date:</span>
-                                    <span id="sidebarEndDate">--</span>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="tour-summary summary-item">
-                            <div class="tour-item">
-                                <div class="tour-item-title">
-                                    <p class="label">Day 1: Hanoi Classic Tour 1Day - Tour Code LC501
-                                    </p>
-                                    <span class="detail">Detail</span>
-                                </div>
-                                <div class="tour-members-day">
-                                    <p>Adults: <strong>X4</strong></p>
-                                    <p>Children: <strong>X0</strong></p>
-                                </div>
-                            </div>
-                            <div class="tour-item">
-                                <div class="tour-item-title">
-                                    <p class="label">Day 1: Hanoi Classic Tour 1Day - Tour Code LC501
-                                    </p>
-                                    <span class="detail">Detail</span>
-                                </div>
-                                <div class="tour-members-day">
-                                    <p>Adults: <strong>X4</strong></p>
-                                    <p>Children: <strong>X0</strong></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="gift-section summary-item">
-                            <p>Gift for you</p>
-                            <p id="sidebar-gift">Lotus Charm Travel T-Shirt</p>
-                        </div>
-                        <div class="coupon-section summary-item">
-                            <p>Lotus Coupon</p>
-                            <svg class="coupon-btn" xmlns="http://www.w3.org/2000/svg" width="18" height="19"
-                                viewBox="0 0 18 19" fill="none">
-                                <path
-                                    d="M6.68172 16.0022C6.53922 16.0022 6.39672 15.9497 6.28422 15.8372C6.06672 15.6197 6.06672 15.2597 6.28422 15.0422L11.1742 10.1522C11.5342 9.79215 11.5342 9.20715 11.1742 8.84715L6.28422 3.95715C6.06672 3.73965 6.06672 3.37965 6.28422 3.16215C6.50172 2.94465 6.86172 2.94465 7.07922 3.16215L11.9692 8.05215C12.3517 8.43465 12.5692 8.95215 12.5692 9.49965C12.5692 10.0472 12.3592 10.5647 11.9692 10.9472L7.07922 15.8372C6.96672 15.9422 6.82422 16.0022 6.68172 16.0022Z"
-                                    fill="#1A1A1A" />
-                            </svg>
-                        </div>
-
-                        <div class="summary-total">
-                            <div class="total-row">
-                                <span class="total-day">Total for 3 days</span>
-                                <span class="total-price">6,000$</span>
-                            </div>
-                            <div class="payment-methods">
-                                <label class="payment-option">
-                                    <input type="radio" name="paymentMethod" value="payDeposit" checked>
-                                    <p class="pay-deposit">Deposit (20%) </p>
-                                    <p class="pay-note">(<strong>*</strong>Non-refundable in case of cancellation)
-                                    </p>
-                                </label>
-                                <label class="payment-option">
-                                    <input type="radio" name="paymentMethod" value="payFull">
-                                    <p class="pay-full">Pay in full</p>
-                                    <p class="pay-note">(<strong>*</strong>Refundable up to 95% in case of
-                                        cancellation)</p>
-                                </label>
-                            </div>
-                        </div>
-                        <button type="button" class="btn-submit-form" id="submitForm">Submit Tour
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="12" viewBox="0 0 13 12"
-                                fill="none">
-                                <path d="M1.13281 6.0022H11.6828" stroke="white" stroke-width="1.19333"
+                    <!-- Sidebar -->
+                    <div class="sidebar">
+                        <p class="sidebar-header">Subtotal customize tour
+                            <svg class="close-sidebar" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <path d="M5 5L18.9991 18.9991" stroke="#292D32" stroke-width="1.5"
                                     stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M7.36719 1.68652L11.6831 6.00237L7.36719 10.3182" stroke="white"
-                                    stroke-width="1.19333" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M5.00094 18.9991L19 5" stroke="#292D32" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                        </button>
+                        </p>
+                        <div class="sidebar-content">
+                            <div class="date-summary summary-item">
+                                <div class="summary-row">
+                                    <span class="total-day">Number of days:</span>
+                                    <span id="sidebarDays">--</span>
+                                </div>
+                                <div class="summary-date">
+                                    <div class="summary-row">
+                                        <span class="title-date">Start date:</span>
+                                        <span id="sidebarStartDate">--</span>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div class="summary-row">
+                                        <span class="title-date">End date:</span>
+                                        <span id="sidebarEndDate">--</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tour-summary summary-item">
+                                <div class="tour-item">
+                                    <div class="tour-item-title">
+                                        <p class="label">Day 1: Hanoi Classic Tour 1Day - Tour Code LC501
+                                        </p>
+                                        <span class="detail">Detail</span>
+                                    </div>
+                                    <div class="tour-members-day">
+                                        <p>Adults: <strong>X4</strong></p>
+                                        <p>Children: <strong>X0</strong></p>
+                                    </div>
+                                </div>
+                                <div class="tour-item">
+                                    <div class="tour-item-title">
+                                        <p class="label">Day 1: Hanoi Classic Tour 1Day - Tour Code LC501
+                                        </p>
+                                        <span class="detail">Detail</span>
+                                    </div>
+                                    <div class="tour-members-day">
+                                        <p>Adults: <strong>X4</strong></p>
+                                        <p>Children: <strong>X0</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="gift-section summary-item">
+                                <p>Gift for you</p>
+                                <p id="sidebar-gift">Lotus Charm Travel T-Shirt</p>
+                            </div>
+                            <div class="coupon-section summary-item">
+                                <p>Lotus Coupon</p>
+                                <svg class="coupon-btn" xmlns="http://www.w3.org/2000/svg" width="18" height="19"
+                                    viewBox="0 0 18 19" fill="none">
+                                    <path
+                                        d="M6.68172 16.0022C6.53922 16.0022 6.39672 15.9497 6.28422 15.8372C6.06672 15.6197 6.06672 15.2597 6.28422 15.0422L11.1742 10.1522C11.5342 9.79215 11.5342 9.20715 11.1742 8.84715L6.28422 3.95715C6.06672 3.73965 6.06672 3.37965 6.28422 3.16215C6.50172 2.94465 6.86172 2.94465 7.07922 3.16215L11.9692 8.05215C12.3517 8.43465 12.5692 8.95215 12.5692 9.49965C12.5692 10.0472 12.3592 10.5647 11.9692 10.9472L7.07922 15.8372C6.96672 15.9422 6.82422 16.0022 6.68172 16.0022Z"
+                                        fill="#1A1A1A" />
+                                </svg>
+                            </div>
+
+                            <div class="summary-total">
+                                <div class="total-row">
+                                    <span class="total-day">Total for 3 days</span>
+                                    <span class="total-price">6,000$</span>
+                                </div>
+                                <div class="payment-methods">
+                                    <label class="payment-option">
+                                        <input type="radio" name="paymentMethod" value="payDeposit" checked>
+                                        <p class="pay-deposit">Deposit (20%) </p>
+                                        <p class="pay-note">(<strong>*</strong>Non-refundable in case of cancellation)
+                                        </p>
+                                    </label>
+                                    <label class="payment-option">
+                                        <input type="radio" name="paymentMethod" value="payFull">
+                                        <p class="pay-full">Pay in full</p>
+                                        <p class="pay-note">(<strong>*</strong>Refundable up to 95% in case of
+                                            cancellation)</p>
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-submit-form" id="submitForm">Submit Tour
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="12" viewBox="0 0 13 12"
+                                    fill="none">
+                                    <path d="M1.13281 6.0022H11.6828" stroke="white" stroke-width="1.19333"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M7.36719 1.68652L11.6831 6.00237L7.36719 10.3182" stroke="white"
+                                        stroke-width="1.19333" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -975,7 +1149,7 @@
                     </label>
                 </div>
             </div>
-            <button type="button" class="btn-submit-form" id="submitForm">Submit Tour
+            <button type="submit" class="btn-submit-form" id="submitForm">Submit Tour
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="12" viewBox="0 0 13 12" fill="none">
                     <path d="M1.13281 6.0022H11.6828" stroke="white" stroke-width="1.19333" stroke-linecap="round"
                         stroke-linejoin="round" />
@@ -990,7 +1164,9 @@
     <template id="daily-plan-template">
         <div class="daily-plan-day">
             <div class="day-header">
-                <div class="day-title">Day <span class="day-number"></span>: <span class="day-date"></span></div>
+                <div class="day-title">Day <span class="day-number"></span>: <span class="day-date"></span>
+                    <p class="confirm-badge">Confirmed</p>
+                </div>
                 <label class="no-service-option">
                     <input type="checkbox" class="no-service-checkbox">
                     <span class="checkbox-custom"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="21"
@@ -1035,14 +1211,14 @@
                         <div class="form-group city-section">
                             <label class="city-label required">City</label>
                             <div class="searchable-select">
-                                <input type="text" class="city-search" placeholder="Search city...">
+                                <input type="text" class="city-search" readonly placeholder="Search city...">
                                 <div class="search-dropdown city-dropdown"></div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="tour-type-label required">Type of tour</label>
                             <div class="searchable-select">
-                                <input type="text" class="tour-type-search" placeholder="Search tour type...">
+                                <input type="text" class="tour-type-search" readonly placeholder="Search tour type...">
                                 <div class="search-dropdown tour-type-dropdown">
                                     <div class="dropdown-option" data-value="mini-tour">Mini Tour</div>
                                     <div class="dropdown-option" data-value="package-tour">Package Tour</div>
@@ -1136,7 +1312,83 @@
                                         placeholder="Enter the tour guide you want">
                                 </div>
                                 <div class="dropdown-options-container">
-                                    <!-- Guide options will be populated by JavaScript -->
+                                    <div class="itemselect">
+                                        <p class="itemselect__title">
+                                            Please select the tour guide you want </p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none">
+                                            <path
+                                                d="M11.9995 16.8001C11.2995 16.8001 10.5995 16.5301 10.0695 16.0001L3.54953 9.48014C3.25953 9.19014 3.25953 8.71014 3.54953 8.42014C3.83953 8.13014 4.31953 8.13014 4.60953 8.42014L11.1295 14.9401C11.6095 15.4201 12.3895 15.4201 12.8695 14.9401L19.3895 8.42014C19.6795 8.13014 20.1595 8.13014 20.4495 8.42014C20.7395 8.71014 20.7395 9.19014 20.4495 9.48014L13.9295 16.0001C13.3995 16.5301 12.6995 16.8001 11.9995 16.8001Z"
+                                                fill="#1A1A1A"></path>
+                                        </svg>
+
+                                        <div class="itemselect__content bookthistour__tourguide_popup open">
+                                            <div class="itemselect__content-header">
+                                                <p>Tour guide select</p>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none">
+                                                    <path d="M5 5L18.9991 18.9991" stroke="#292D32" stroke-width="1.5"
+                                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M5.00094 18.9991L19 5" stroke="#292D32" stroke-width="1.5"
+                                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="search-box">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21"
+                                                    viewBox="0 0 20 21" fill="none">
+                                                    <path
+                                                        d="M9.58366 17.9998C13.9559 17.9998 17.5003 14.4554 17.5003 10.0832C17.5003 5.71092 13.9559 2.1665 9.58366 2.1665C5.2114 2.1665 1.66699 5.71092 1.66699 10.0832C1.66699 14.4554 5.2114 17.9998 9.58366 17.9998Z"
+                                                        stroke="#292D32" stroke-opacity="0.25" stroke-width="1.25"
+                                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M18.3337 18.8332L16.667 17.1665" stroke="#292D32"
+                                                        stroke-opacity="0.25" stroke-width="1.25" stroke-linecap="round"
+                                                        stroke-linejoin="round"></path>
+                                                </svg>
+                                                <input type="text" placeholder="Enter the tour guide you want"
+                                                    class="tourguide-search">
+                                            </div>
+                                            <div class="itemselect__content_list">
+                                                <div class="itemselect__content_item">
+                                                    <p>
+                                                        English </p>
+                                                </div>
+                                                <div class="itemselect__content_item">
+                                                    <p>
+                                                        Chinese </p>
+                                                </div>
+                                                <div class="itemselect__content_item">
+                                                    <p>
+                                                        Korean </p>
+                                                </div>
+                                                <div class="itemselect__content_item">
+                                                    <p>
+                                                        Spanish </p>
+                                                </div>
+                                                <div class="itemselect__content_item">
+                                                    <p>
+                                                        Japanese </p>
+                                                </div>
+                                                <div class="itemselect__content_item">
+                                                    <p>
+                                                        Vietnamese </p>
+                                                </div>
+                                                <div class="itemselect__content_item">
+                                                    <p>
+                                                        Laos </p>
+                                                </div>
+                                                <div class="itemselect__content_item">
+                                                    <p>
+                                                        Cambodian </p>
+                                                </div>
+                                                <div class="itemselect__content_item">
+                                                    <p>
+                                                        Thai </p>
+                                                </div>
+                                            </div>
+                                            <div class="no-results-message">
+                                                No results found </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1245,6 +1497,13 @@
                             </button>
                         </div>
                     </div>
+                    <div class="room-note">
+                        <p class="note-text"><strong>Note*</strong></p>
+                        <ul class="note-list">
+                            <li>• Max 2 adults + 1 child (1-3 yrs) per room</li>
+                            <li>• Child 6+ needs extra bed (max 1/room) or extra room</li>
+                        </ul>
+                    </div>
 
                     <div class="hotel-options">
                         <label class="hotel-option" data-price="50">
@@ -1302,13 +1561,7 @@
                         </div>
 
                         <div class="extra-bed-section">
-                            <div class="room-note">
-                                <p class="note-text"><strong>Note*</strong></p>
-                                <ul class="note-list">
-                                    <li>• Max 2 adults + 1 child (1-3 yrs) per room</li>
-                                    <li>• Child 6+ needs extra bed (max 1/room) or extra room</li>
-                                </ul>
-                            </div>
+
 
                             <div class="extra-bed-options">
                                 <p class="extra-bed-text">Extra bed: <span class="extra-bed-price">(10usd/bed)</span>
@@ -1328,38 +1581,39 @@
                                     </label>
                                 </div>
 
-                                <div class="extra-bed-input-group" style="display: none;">
-                                    <div class="extra-bed-selector">
-                                        <div class="select-label">
-                                            <p>Select number of Extrabed</p>
-                                        </div>
-                                        <div class="extra-bed-controls">
-                                            <button type="button" class="extra-bed-btn minus">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19"
-                                                    viewBox="0 0 18 19" fill="none">
-                                                    <path
-                                                        d="M13.3626 10.0455H4.6353C4.33712 10.0455 4.08984 9.79823 4.08984 9.50004C4.08984 9.20186 4.33712 8.95459 4.6353 8.95459H13.3626C13.6608 8.95459 13.908 9.20186 13.908 9.50004C13.908 9.79823 13.6608 10.0455 13.3626 10.0455Z"
-                                                        fill="white" />
-                                                </svg>
-                                            </button>
-                                            <span class="extra-bed-count">00</span>
-                                            <button type="button" class="extra-bed-btn plus">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19"
-                                                    viewBox="0 0 18 19" fill="none">
-                                                    <path
-                                                        d="M13.3626 10.0455H4.6353C4.33712 10.0455 4.08984 9.79823 4.08984 9.50004C4.08984 9.20186 4.33712 8.95459 4.6353 8.95459H13.3626C13.6608 8.95459 13.908 9.20186 13.908 9.50004C13.908 9.79823 13.6608 10.0455 13.3626 10.0455Z"
-                                                        fill="white" />
-                                                    <path
-                                                        d="M9.00249 14.409C8.7043 14.409 8.45703 14.1617 8.45703 13.8635V5.13627C8.45703 4.83809 8.7043 4.59082 9.00249 4.59082C9.30067 4.59082 9.54794 4.83809 9.54794 5.13627V13.8635C9.54794 14.1617 9.30067 14.409 9.00249 14.409Z"
-                                                        fill="white" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="extra-bed-error" style="display: none;">
-                                        <span style="color: red;">Extra bed count must be less than room count</span>
-                                    </div>
+
+                            </div>
+                        </div>
+                        <div class="extra-bed-input-group" style="display: none;">
+                            <div class="extra-bed-selector">
+                                <div class="select-label">
+                                    <p>Select number of Extrabed</p>
                                 </div>
+                                <div class="extra-bed-controls">
+                                    <button type="button" class="extra-bed-btn minus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19"
+                                            viewBox="0 0 18 19" fill="none">
+                                            <path
+                                                d="M13.3626 10.0455H4.6353C4.33712 10.0455 4.08984 9.79823 4.08984 9.50004C4.08984 9.20186 4.33712 8.95459 4.6353 8.95459H13.3626C13.6608 8.95459 13.908 9.20186 13.908 9.50004C13.908 9.79823 13.6608 10.0455 13.3626 10.0455Z"
+                                                fill="white" />
+                                        </svg>
+                                    </button>
+                                    <span class="extra-bed-count">00</span>
+                                    <button type="button" class="extra-bed-btn plus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19"
+                                            viewBox="0 0 18 19" fill="none">
+                                            <path
+                                                d="M13.3626 10.0455H4.6353C4.33712 10.0455 4.08984 9.79823 4.08984 9.50004C4.08984 9.20186 4.33712 8.95459 4.6353 8.95459H13.3626C13.6608 8.95459 13.908 9.20186 13.908 9.50004C13.908 9.79823 13.6608 10.0455 13.3626 10.0455Z"
+                                                fill="white" />
+                                            <path
+                                                d="M9.00249 14.409C8.7043 14.409 8.45703 14.1617 8.45703 13.8635V5.13627C8.45703 4.83809 8.7043 4.59082 9.00249 4.59082C9.30067 4.59082 9.54794 4.83809 9.54794 5.13627V13.8635C9.54794 14.1617 9.30067 14.409 9.00249 14.409Z"
+                                                fill="white" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="extra-bed-error" style="display: none;">
+                                <span style="color: red;">Extra bed count must be less than room count</span>
                             </div>
                         </div>
                     </div>
@@ -1378,7 +1632,7 @@
 
                     <div class="services-grid">
                         <label class="service-option">
-                            <input type="checkbox" class="visa-checkbox" checked>
+                            <input type="checkbox" class="visa-checkbox" name="visa" value="visa" checked>
                             <span class="checkbox-custom">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21"
                                     fill="none">
@@ -1390,7 +1644,7 @@
                             Visa
                         </label>
                         <label class="service-option">
-                            <input type="checkbox" class="massage-checkbox">
+                            <input type="checkbox" class="massage-checkbox" name="massage" value="massage">
                             <span class="checkbox-custom">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21"
                                     fill="none">
@@ -1402,7 +1656,7 @@
                             Massage
                         </label>
                         <label class="service-option">
-                            <input type="checkbox" class="romantic-checkbox">
+                            <input type="checkbox" class="romantic-checkbox" name="romantic" value="romantic">
                             <span class="checkbox-custom">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21"
                                     fill="none">
@@ -1414,7 +1668,7 @@
                             Romantic dinner
                         </label>
                         <label class="service-option">
-                            <input type="checkbox" class="arrival-checkbox">
+                            <input type="checkbox" class="arrival-checkbox" name="arrival" value="arrival">
                             <span class="checkbox-custom">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21"
                                     fill="none">
@@ -1426,7 +1680,7 @@
                             Arrival fast track
                         </label>
                         <label class="service-option">
-                            <input type="checkbox" class="vietnamese-checkbox">
+                            <input type="checkbox" class="vietnamese-checkbox" name="vietnamese" value="vietnamese">
                             <span class="checkbox-custom">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21"
                                     fill="none">
@@ -1438,7 +1692,7 @@
                             Vietnamese hair wash
                         </label>
                         <label class="service-option">
-                            <input type="checkbox" class="party-checkbox">
+                            <input type="checkbox" class="party-checkbox" name="party" value="party">
                             <span class="checkbox-custom">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21"
                                     fill="none">
@@ -1450,7 +1704,7 @@
                             Party
                         </label>
                         <label class="service-option">
-                            <input type="checkbox" class="departure-checkbox">
+                            <input type="checkbox" class="departure-checkbox" name="departure" value="departure">
                             <span class="checkbox-custom">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21"
                                     fill="none">
@@ -1462,7 +1716,7 @@
                             Departure fast track
                         </label>
                         <label class="service-option">
-                            <input type="checkbox" class="photography-checkbox">
+                            <input type="checkbox" class="photography-checkbox" name="photography" value="photography">
                             <span class="checkbox-custom">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21"
                                     fill="none">
